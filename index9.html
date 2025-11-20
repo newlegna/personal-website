@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>angel wen</title>
+    <style>
+        /* --- CONFIG --- */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-white: #fff;
+            --text-light-gray: #e0e0e0;
+            /* NEW: Dark Blue Modal Background */
+            --modal-bg: rgba(5, 20, 60, 0.95); 
+        }
+
+        /* --- BODY & BACKGROUND --- */
+        body {
+            margin: 0; padding: 0;
+            font-family: "Courier New", Courier, monospace;
+            height: 100vh; overflow: hidden;
+            color: var(--text-white);
+            background: url('background-wide.jpg') no-repeat center center fixed;
+            background-size: cover; 
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            position: relative; width: 100%; height: 100vh;
+            transition: filter 0.3s ease;
+        }
+        .container.blur { filter: blur(8px); pointer-events: none; }
+
+        /* --- HEADER --- */
+        header {
+            position: absolute; top: 40px; width: 100%; text-align: center; z-index: 10;
+        }
+        h1 {
+            font-size: 2.5rem; text-transform: lowercase; 
+            letter-spacing: -2px; margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); font-weight: bold;
+        }
+
+        /* --- SOCIAL ICONS (Bottom Middle) --- */
+        .social-bar {
+            position: absolute;
+            bottom: 30px; /* Distance from bottom */
+            left: 50%;
+            transform: translateX(-50%); /* Center horizontally */
+            z-index: 20;
+            display: flex;
+            gap: 20px;
+        }
+        .social-link {
+            display: inline-block;
+            opacity: 0.6; /* Slightly more transparent initially */
+            transition: all 0.3s ease;
+        }
+        .social-link svg {
+            /* NEW: Smaller size */
+            width: 18px;
+            height: 18px;
+            fill: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        .social-link:hover {
+            opacity: 1;
+            transform: translateY(-3px);
+        }
+
+        /* --- THE FLOATING BOXES --- */
+        .box {
+            position: absolute; width: 180px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 18px;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            cursor: pointer; color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease; user-select: none;
+        }
+        .box:hover {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transform: scale(1.05); z-index: 100;
+        }
+
+        /* Positioning & Animation */
+        .pos-1 { top: 18%; left: 8%; animation: float 6s ease-in-out infinite; }
+        .pos-2 { top: 48%; left: 14%; animation: float 7s ease-in-out infinite 1s; }
+        .pos-3 { bottom: 15%; left: 8%; animation: float 8s ease-in-out infinite 0.5s; }
+        .pos-4 { top: 22%; right: 8%; animation: float 6.5s ease-in-out infinite 2s; }
+        .pos-5 { top: 52%; right: 16%; animation: float 7.5s ease-in-out infinite 1.5s; }
+        .pos-6 { bottom: 18%; right: 8%; animation: float 5.5s ease-in-out infinite 0.2s; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+        .dots { display: flex; gap: 5px; margin-bottom: 12px; opacity: 0.8; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; background: white;}
+        
+        .box h3 { margin: 0 0 5px 0; font-size: 1rem; font-weight: bold; }
+        .box p { 
+            margin: 0; font-size: 0.8rem; 
+            color: var(--text-light-gray); font-weight: 500;
+        }
+
+        /* --- MODAL OVERLAY --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 999;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        /* --- MODAL WINDOW (Now Dark Blue) --- */
+        .modal-window {
+            width: 90%; max-width: 700px;
+            background: var(--modal-bg); /* Uses the new dark blue variable */
+            border: 1px solid rgba(255,255,255,0.3); /* Slightly brighter border for contrast */
+            border-radius: 20px;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            padding: 30px; box-sizing: border-box;
+            transform: translateY(20px); transition: transform 0.3s ease;
+            display: flex; flex-direction: column;
+            max-height: 85vh;
+        }
+        .modal-overlay.active .modal-window { transform: translateY(0); }
+
+        .close-btn {
+            align-self: flex-end; font-size: 1.5rem; cursor: pointer; 
+            opacity: 0.8; margin-bottom: 10px; color: #fff;
+        }
+        .close-btn:hover { opacity: 1; }
+
+        /* --- CONTENT PREVIEWS --- */
+        .content-section { display: none; height: 100%; }
+        .content-section.active { display: flex; flex-direction: column; animation: fadeIn 0.4s; height: 100%; }
+        
+        h2 { margin: 0 0 10px 0; font-size: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
+        p { 
+            font-size: 0.95rem; color: var(--text-light-gray);
+            margin-bottom: 20px; line-height: 1.5;
+        }
+
+        /* IFRAME CONTAINERS */
+        .embed-container {
+            flex-grow: 1; width: 100%; border-radius: 12px; overflow: hidden; background: #000;
+            min-height: 350px;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* WEBSITE PREVIEW IMAGE */
+        .site-preview-card {
+            flex-grow: 1; width: 100%;
+            background-size: cover; background-position: top center;
+            border-radius: 12px;
+            position: relative; cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none;
+            min-height: 300px;
+            background-color: rgba(0,0,0,0.3); /* Darker backing for image */
+        }
+        .site-preview-card:hover { transform: scale(0.99); border-color: #fff; }
+        
+        .click-badge {
+            background: rgba(0,0,0,0.8); color: white; padding: 10px 20px;
+            border-radius: 30px; border: 1px solid white;
+            font-weight: bold; opacity: 0; transition: opacity 0.3s;
+        }
+        .site-preview-card:hover .click-badge { opacity: 1; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .container { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-end; padding-bottom: 80px; overflow-y: auto;}
+            .box { position: relative; top: auto; left: auto; right: auto; width: 40%; margin: 5px; animation: none; }
+            .modal-window { height: 80vh; }
+            .social-bar { bottom: 20px; } /* Adjust mobile position */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-container">
+        <header>
+            <h1>angel wen</h1>
+        </header>
+
+        <div class="box pos-1" onclick="openModal('writing')">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Writing</h3><p>Substack</p>
+        </div>
+        <div class="box pos-2" onclick="openModal('prototypes')">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Prototypes</h3><p>Notion Portfolio</p>
+        </div>
+        <div class="box pos-3" onclick="openModal('about')">
+             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+             <h3>About</h3><p>The person.</p>
+         </div>
+        <div class="box pos-4" onclick="openModal('videos')">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Videos</h3><p>YouTube</p>
+        </div>
+        <div class="box pos-5" onclick="openModal('audio')">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Audio</h3><p>SoundCloud</p>
+        </div>
+         <div class="box pos-6" onclick="openModal('visuals')">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Visuals</h3><p>Instagram</p>
+        </div>
+
+        <div class="social-bar">
+            <a href="https://x.com/AngelwenW" target="_blank" class="social-link" title="Twitter / X">
+                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+
+            <a href="https://www.linkedin.com/in/angel-wen/" target="_blank" class="social-link" title="LinkedIn">
+                <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+
+            <a href="https://instagram.com/creatively.angel" target="_blank" class="social-link" title="Instagram">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.011-4.849-.069-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="overlay" onclick="closeModal(event)">
+        <div class="modal-window">
+            <div class="close-btn" onclick="closeModal(event, true)">&times;</div>
+
+            <div id="writing" class="content-section">
+                <h2>Writing Archive</h2>
+                <p>Click below to read on Substack.</p>
+                <a href="https://substack.com/@angelwen?" target="_blank" class="site-preview-card" 
+                   style="background-image: url('substack.jpg');">
+                    <div class="click-badge">Open Substack &rarr;</div>
+                </a>
+            </div>
+
+            <div id="prototypes" class="content-section">
+                <h2>Design Prototypes</h2>
+                <p>Click below to view Notion portfolio.</p>
+                 <a href="https://angelwen.notion.site/Hi-I-m-Angel-Multidisciplinary-Designer-ae1d19707f05452ca2edfd63ca89ccdc?source=copy_link" target="_blank" class="site-preview-card"
+                   style="background-image: url('notion.jpg');">
+                    <div class="click-badge">Open Notion &rarr;</div>
+                </a>
+            </div>
+
+            <div id="about" class="content-section">
+                <h2>About Angel</h2>
+                <p>Creative technologist, artist, and explorer.</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2);">
+                    <p style="color:#e0e0e0; margin:0;">"Hi, I’m Angel — a builder, storyteller, and community-driven creator who’s obsessed with helping people find clarity, meaning, and support in the moments they need it most.
+
+I’ve spent the past few years moving between worlds: winning Hack the North with a health-tech app, living as a digital nomad across 10+ countries, growing a YouTube channel to 9,000 subscribers, and creating content that reached over 700,000 views.
+Along the way, I worked as a Product Designer at Hootsuite and later transitioned into Growth + GTM roles for early-stage startups, where I discovered my love for building communities, designing thoughtful experiences, and turning ideas into real products that people feel seen by.
+
+Today, my work lives at the intersection of psychology, women’s health, and neurodivergence.
+
+I care deeply about human flourishing, self-discovery, and creating spaces (digital or in-person) where people feel supported, understood, and connected. Whether it’s designing an app, hosting a circle, or sharing my own journey, my goal is always the same:
+to make the world feel a bit more spacious, soft, and empowering for people who think and feel deeply.
+
+If you’re building something aligned, exploring purpose, or simply curious — I’d love to connect."</p>
+                </div>
+            </div>
+
+            <div id="videos" class="content-section">
+                <h2>Visual diaries and video essays.</h2>
+                <p>On Hiatus</p>
+                <a href="https://www.youtube.com/channel/UCSsOXbbmOAyd-NwaswGkpnQ" target="_blank" class="site-preview-card"
+                   style="background-image: url('youtube.jpg');">
+                    <div class="click-badge">Watch on YouTube &rarr;</div>
+                </a>
+            </div>
+
+            <div id="audio" class="content-section">
+                <h2>Audio Logs</h2>
+                <p>Recent Mixes</p>
+                <div class="embed-container">
+                    <iframe scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/l_angemusic&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+                </div>
+            </div>
+
+            <div id="visuals" class="content-section">
+                <h2>Visual Gallery</h2>
+                <p>Latest from Instagram.</p>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="site-preview-card"
+                   style="background-image: url('instagram.jpg');">
+                    <div class="click-badge">Open Instagram &rarr;</div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById('main-container').classList.add('blur');
+            document.getElementById('overlay').classList.add('active');
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(event, force = false) {
+            if (event.target === document.getElementById('overlay') || force) {
+                document.getElementById('main-container').classList.remove('blur');
+                document.getElementById('overlay').classList.remove('active');
+                // Stop videos when closing
+                var iframes = document.getElementsByTagName("iframe");
+                for (var i = 0; i < iframes.length; i++) {
+                    var src = iframes[i].src;
+                    iframes[i].src = src;
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
