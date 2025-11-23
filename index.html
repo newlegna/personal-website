@@ -72,9 +72,12 @@
             cursor: grab; 
             color: white;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease; 
+            /* Important: 'transform' transition removed for dragging responsiveness */
+            transition: box-shadow 0.3s ease, background 0.3s ease; 
             display: flex; flex-direction: column; justify-content: center;
             animation: float 6s ease-in-out infinite;
+            /* Prevent browser handling of touch gestures on boxes */
+            touch-action: none;
         }
         
         .box:active {
@@ -212,7 +215,7 @@
             .dots { gap: 4px; margin-bottom: 8px; }
             .dot { width: 6px; height: 6px; }
 
-            /* Mobile Positioning */
+            /* Mobile Positioning - Clustered near edges */
             .pos-1 { top: 15%; left: 3%; }
             .pos-2 { top: 40%; left: 2%; }
             .pos-3 { bottom: 20%; left: 3%; }
@@ -232,28 +235,28 @@
             <h1>angel wen</h1>
         </header>
 
-        <!-- Boxes -->
-        <div class="box pos-1" data-modal="writing">
+        <!-- Boxes with onclick RESTORED -->
+        <div class="box pos-1" onclick="openModal('writing')">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Writing</h3><p>Substack</p>
         </div>
-        <div class="box pos-2" data-modal="prototypes">
+        <div class="box pos-2" onclick="openModal('prototypes')">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Prototypes</h3><p>Recent Builds</p>
         </div>
-        <div class="box pos-3" data-modal="about">
+        <div class="box pos-3" onclick="openModal('about')">
              <div class="dots"><div class="dot"></div><div class="dot"></div></div>
              <h3>About</h3><p>The person.</p>
          </div>
-        <div class="box pos-4" data-modal="videos">
+        <div class="box pos-4" onclick="openModal('videos')">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Videos</h3><p>YouTube</p>
         </div>
-        <div class="box pos-5" data-modal="audio">
+        <div class="box pos-5" onclick="openModal('audio')">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Audio</h3><p>SoundCloud</p>
         </div>
-        <div class="box pos-6" data-modal="visuals">
+        <div class="box pos-6" onclick="openModal('visuals')">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Visual Art</h3><p>Instagram</p>
         </div>
@@ -271,8 +274,161 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="overlay" onclick="closeModal(event)">
+        <div class="modal-window">
+            <div class="close-btn" onclick="closeModal(event, true)">&times;</div>
+
+            <div id="writing" class="content-section">
+                <h2>Writing Archive</h2>
+                <p>Click below to read on Substack.</p>
+                <a href="https://substack.com/@angelwen?" target="_blank" class="site-preview-card" 
+                   style="background-image: url('substack.jpg');">
+                    <div class="click-badge">Open Substack &rarr;</div>
+                </a>
+            </div>
+
+            <!-- PROTOTYPES SECTION WITH PROJECT CARDS -->
+            <div id="prototypes" class="content-section">
+                <h2>Design Prototypes</h2>
+                <p>Experiments in women's health, motion, and community.</p>
+                
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <a href="#" class="project-card">
+                        <div class="project-img" style="background-image: url('cyclesync.jpg');"></div>
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">CycleSync</div>
+                                </div>
+                                <div class="project-desc">
+                                    A tracker for neurodivergent women to map ADHD symptoms to their menstrual cycle.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">Health</span>
+                                <span class="tag">React</span>
+                                <span class="tag">ADHD</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Project 2 -->
+                    <a href="#" class="project-card">
+                        <div class="project-img" style="background-image: url('waack.jpg');"></div>
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">Waack Academy</div>
+                                </div>
+                                <div class="project-desc">
+                                    AI motion tracking app for learning Waacking and syncing movement to rhythm.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">Motion AI</span>
+                                <span class="tag">Dance</span>
+                                <span class="tag">Webcam</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Project 3 -->
+                    <a href="#" class="project-card">
+                        <div class="project-img" style="background-image: url('citymatch.jpg');"></div>
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">CityMatch</div>
+                                </div>
+                                <div class="project-desc">
+                                    Vibe-based relocation finder comparing cities on community, weather & walkability.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">Data</span>
+                                <span class="tag">Lifestyle</span>
+                                <span class="tag">React</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Full Portfolio Link -->
+                    <a href="https://angelwen.notion.site/Hi-I-m-Angel-Multidisciplinary-Designer-ae1d19707f05452ca2edfd63ca89ccdc?source=copy_link" target="_blank" class="project-card" style="border-color: rgba(255,255,255,0.4);">
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">Full Portfolio</div>
+                                    <span style="font-size:1.2rem;">&rarr;</span>
+                                </div>
+                                <div class="project-desc">
+                                    View all case studies and detailed documentation on Notion.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag" style="background: white; color: black; font-weight: bold;">Notion</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div id="about" class="content-section">
+                <h2>About Angel</h2>
+                <p>Creative technologist, artist, and explorer.</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2);">
+                    <p style="color:#e0e0e0; margin:0;">"Hi, I’m Angel — a builder, storyteller, and community-driven creator who’s obsessed with helping people find clarity, meaning, and support in the moments they need it most.
+
+I’ve spent the past few years moving between worlds: winning Hack the North with a health-tech app, living as a digital nomad across 10+ countries, growing a YouTube channel to 9,000 subscribers, and creating content that reached over 700,000 views.
+Along the way, I worked as a Product Designer at Hootsuite and later transitioned into Growth + GTM roles for early-stage startups, where I discovered my love for building communities, designing thoughtful experiences, and turning ideas into real products that people feel seen by.
+
+Today, my work lives at the intersection of psychology, women’s health, and neurodivergence.
+
+I care deeply about human flourishing, self-discovery, and creating spaces (digital or in-person) where people feel supported, understood, and connected. Whether it’s designing an app, hosting a circle, or sharing my own journey, my goal is always the same:
+to make the world feel a bit more spacious, soft, and empowering for people who think and feel deeply.
+
+If you’re building something aligned, exploring purpose, or simply curious — I’d love to connect."</p>
+                </div>
+            </div>
+
+            <div id="videos" class="content-section">
+                <h2>Visual diaries and video essays.</h2>
+                <p>On Hiatus</p>
+                <a href="https://www.youtube.com/channel/UCSsOXbbmOAyd-NwaswGkpnQ" target="_blank" class="site-preview-card"
+                   style="background-image: url('youtube.jpg');">
+                    <div class="click-badge">Watch on YouTube &rarr;</div>
+                </a>
+            </div>
+
+            <div id="audio" class="content-section">
+                <h2>Music Logs</h2>
+                <p>Recent Mixes</p>
+                <div class="embed-container">
+                    <iframe scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/l_angemusic&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+                </div>
+            </div>
+
+            <div id="visuals" class="content-section">
+                <h2>Visual Gallery</h2>
+                <p>Latest from Instagram.</p>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="site-preview-card"
+                   style="background-image: url('instagram.jpg');">
+                    <div class="click-badge">Open Instagram &rarr;</div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
     <script>
+        // --- GLOBAL VARIABLES ---
+        let isDragging = false;
+
+        // --- MODAL LOGIC ---
         function openModal(id) {
+            // CRITICAL: Don't open if the user just finished dragging a box
+            if (isDragging) return;
+
             document.getElementById('main-container').classList.add('blur');
             document.getElementById('overlay').classList.add('active');
             document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
@@ -283,6 +439,7 @@
             if (event.target === document.getElementById('overlay') || force) {
                 document.getElementById('main-container').classList.remove('blur');
                 document.getElementById('overlay').classList.remove('active');
+                // Reset videos
                 var iframes = document.getElementsByTagName("iframe");
                 for (var i = 0; i < iframes.length; i++) {
                     var src = iframes[i].src;
@@ -296,67 +453,108 @@
         let zIndexCounter = 100;
 
         boxes.forEach(box => {
-            let isDragging = false;
             let startX, startY, initialLeft, initialTop;
             let hasMoved = false;
 
-            // --- MOUSE EVENTS ---
-            box.addEventListener('mousedown', startDrag);
-            window.addEventListener('mousemove', moveDrag);
-            window.addEventListener('mouseup', endDrag);
-
-            // --- TOUCH EVENTS ---
-            box.addEventListener('touchstart', (e) => {
-                // Prevent scrolling if we are trying to drag
-                if(e.cancelable) e.preventDefault(); 
-                startDrag(e.touches[0]); 
-            }, {passive: false});
-            
-            window.addEventListener('touchmove', (e) => {
-                 moveDrag(e.touches[0]); 
-            }, {passive: false});
-            
-            window.addEventListener('touchend', endDrag);
-
-            function startDrag(e) {
-                isDragging = true;
+            // --- 1. MOUSE EVENTS ---
+            box.addEventListener('mousedown', (e) => {
+                // Prepare state
+                isDragging = false; // Initially false, only becomes true if moved
                 hasMoved = false;
+                
                 zIndexCounter++;
                 box.style.zIndex = zIndexCounter;
                 box.style.animation = 'none';
                 box.style.cursor = 'grabbing';
+                
                 initialLeft = box.offsetLeft;
                 initialTop = box.offsetTop;
                 startX = e.clientX;
                 startY = e.clientY;
-            }
 
-            function moveDrag(e) {
-                if (!isDragging) return;
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
+            });
+
+            const onMouseMove = (e) => {
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
 
-                // Threshold set to 10px to avoid accidental drags on taps
-                if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
                     hasMoved = true;
+                    isDragging = true; // NOW we are dragging
                 }
 
-                box.style.left = `${initialLeft + dx}px`;
-                box.style.top = `${initialTop + dy}px`;
-            }
+                if (isDragging) {
+                    box.style.left = `${initialLeft + dx}px`;
+                    box.style.top = `${initialTop + dy}px`;
+                }
+            };
 
-            function endDrag(e) {
-                if (!isDragging) return;
-                isDragging = false;
+            const onMouseUp = (e) => {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+                
                 box.style.cursor = 'grab';
                 box.style.animation = 'float 6s ease-in-out infinite';
 
-                // If we didn't move much, treat it as a click
-                if (!hasMoved) {
-                    const modalId = box.getAttribute('data-modal');
-                    if (modalId) openModal(modalId);
+                // Use a small timeout to allow the 'click' event to fire 
+                // and see the 'isDragging' flag before we reset it.
+                setTimeout(() => {
+                    isDragging = false;
+                }, 50);
+            };
+
+
+            // --- 2. TOUCH EVENTS ---
+            box.addEventListener('touchstart', (e) => {
+                // Do NOT preventDefault here, so click can still fire if no move happens
+                
+                isDragging = false;
+                hasMoved = false;
+                
+                zIndexCounter++;
+                box.style.zIndex = zIndexCounter;
+                box.style.animation = 'none';
+                
+                initialLeft = box.offsetLeft;
+                initialTop = box.offsetTop;
+                const touch = e.touches[0];
+                startX = touch.clientX;
+                startY = touch.clientY;
+
+                window.addEventListener('touchmove', onTouchMove, { passive: false });
+                window.addEventListener('touchend', onTouchEnd);
+            }, { passive: false });
+
+            const onTouchMove = (e) => {
+                const touch = e.touches[0];
+                const dx = touch.clientX - startX;
+                const dy = touch.clientY - startY;
+
+                if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+                    hasMoved = true;
+                    isDragging = true;
                 }
-            }
+
+                if (isDragging) {
+                    // Prevent scrolling ONLY if we are actually dragging the box
+                    if (e.cancelable) e.preventDefault();
+                    box.style.left = `${initialLeft + dx}px`;
+                    box.style.top = `${initialTop + dy}px`;
+                }
+            };
+
+            const onTouchEnd = (e) => {
+                window.removeEventListener('touchmove', onTouchMove);
+                window.removeEventListener('touchend', onTouchEnd);
+                
+                box.style.animation = 'float 6s ease-in-out infinite';
+
+                setTimeout(() => {
+                    isDragging = false;
+                }, 50);
+            };
         });
     </script>
 
