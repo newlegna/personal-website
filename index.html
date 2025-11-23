@@ -7,10 +7,10 @@
     <style>
         /* --- CONFIG --- */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.15);
             --glass-border: rgba(255, 255, 255, 0.3);
             --text-white: #fff;
-            --text-light-gray: #e0e0e0;
+            --text-light-gray: #f0f0f0;
             --modal-bg: rgba(5, 20, 60, 0.95); 
             --accent-blue: rgba(100, 200, 255, 0.2);
         }
@@ -23,6 +23,8 @@
             color: var(--text-white);
             background: url('background-wide.jpg') no-repeat center center fixed;
             background-size: cover; 
+            /* Prevent text selection while dragging */
+            user-select: none;
         }
 
         /* --- CONTAINER --- */
@@ -35,70 +37,88 @@
         /* --- HEADER --- */
         header {
             position: absolute; top: 40px; width: 100%; text-align: center; z-index: 10;
+            pointer-events: none;
         }
         h1 {
-            font-size: 2.5rem; text-transform: lowercase; 
+            font-size: 3rem; text-transform: lowercase; 
             letter-spacing: -2px; margin: 0;
             text-shadow: 0 2px 10px rgba(0,0,0,0.5); font-weight: bold;
         }
 
         /* --- SOCIAL ICONS --- */
         .social-bar {
-            position: absolute; bottom: 30px; left: 50%;
+            position: absolute; bottom: 40px; left: 50%;
             transform: translateX(-50%); z-index: 20;
-            display: flex; gap: 20px;
+            display: flex; gap: 25px;
         }
         .social-link {
-            display: inline-block; opacity: 0.6; transition: all 0.3s ease;
+            display: inline-block; opacity: 0.8; transition: all 0.3s ease;
         }
         .social-link svg {
-            width: 18px; height: 18px; fill: white;
+            width: 24px; height: 24px; fill: white;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
         .social-link:hover { opacity: 1; transform: translateY(-3px); }
 
-        /* --- FLOATING BOXES --- */
+        /* --- FLOATING BOXES (DESKTOP) --- */
         .box {
-            position: absolute; width: 180px;
+            position: absolute; 
+            width: 220px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 16px; padding: 18px;
-            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            cursor: pointer; color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease; user-select: none;
+            border-radius: 18px; 
+            padding: 25px;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            cursor: grab; /* Shows user it can be moved */
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease; 
+            /* Note: removed 'all' transition to prevent lag when dragging top/left */
+            display: flex; flex-direction: column; justify-content: center;
         }
+        
+        .box:active {
+            cursor: grabbing;
+        }
+
         .box:hover {
             background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 15px rgba(255,255,255,0.1);
             transform: scale(1.05); z-index: 100;
+            border-color: rgba(255, 255, 255, 0.6);
         }
 
+        /* Positions */
         .pos-1 { top: 18%; left: 8%; animation: float 6s ease-in-out infinite; }
-        .pos-2 { top: 48%; left: 14%; animation: float 7s ease-in-out infinite 1s; }
-        .pos-3 { bottom: 15%; left: 8%; animation: float 8s ease-in-out infinite 0.5s; }
-        .pos-4 { top: 22%; right: 8%; animation: float 6.5s ease-in-out infinite 2s; }
-        .pos-5 { top: 52%; right: 16%; animation: float 7.5s ease-in-out infinite 1.5s; }
-        .pos-6 { bottom: 18%; right: 8%; animation: float 5.5s ease-in-out infinite 0.2s; }
+        .pos-2 { top: 50%; left: 12%; animation: float 7s ease-in-out infinite 1s; }
+        .pos-3 { bottom: 12%; left: 6%; animation: float 8s ease-in-out infinite 0.5s; }
+        .pos-4 { top: 20%; right: 8%; animation: float 6.5s ease-in-out infinite 2s; }
+        .pos-5 { top: 55%; right: 14%; animation: float 7.5s ease-in-out infinite 1.5s; }
+        .pos-6 { bottom: 15%; right: 6%; animation: float 5.5s ease-in-out infinite 0.2s; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        .dots { display: flex; gap: 5px; margin-bottom: 12px; opacity: 0.8; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; background: white;}
-        .box h3 { margin: 0 0 5px 0; font-size: 1rem; font-weight: bold; }
-        .box p { margin: 0; font-size: 0.8rem; color: var(--text-light-gray); font-weight: 500; }
+        .dots { display: flex; gap: 6px; margin-bottom: 15px; opacity: 0.9; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: white;}
+        
+        .box h3 { 
+            margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+        }
+        .box p { 
+            margin: 0; font-size: 1rem; color: var(--text-light-gray); font-weight: 500; 
+        }
 
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 999;
+            background: rgba(0,0,0,0.7); z-index: 999;
             display: none; justify-content: center; align-items: center;
             opacity: 0; transition: opacity 0.3s ease;
         }
         .modal-overlay.active { display: flex; opacity: 1; }
 
         .modal-window {
-            width: 90%; max-width: 700px;
+            width: 90%; max-width: 800px;
             background: var(--modal-bg);
             border: 1px solid rgba(255,255,255,0.3);
             border-radius: 20px;
@@ -113,109 +133,85 @@
         .modal-overlay.active .modal-window { transform: translateY(0); }
 
         .close-btn {
-            align-self: flex-end; font-size: 1.5rem; cursor: pointer; 
+            align-self: flex-end; font-size: 2rem; cursor: pointer; 
             opacity: 0.8; margin-bottom: 10px; color: #fff;
+            line-height: 1;
         }
-        .close-btn:hover { opacity: 1; }
+        .close-btn:hover { opacity: 1; transform: scale(1.1); }
 
         /* --- CONTENT STYLES --- */
         .content-section { display: none; height: 100%; }
         .content-section.active { display: flex; flex-direction: column; animation: fadeIn 0.4s; height: 100%; }
         
-        h2 { margin: 0 0 10px 0; font-size: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
-        p { font-size: 0.95rem; color: var(--text-light-gray); margin-bottom: 20px; line-height: 1.5; }
+        h2 { margin: 0 0 15px 0; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; }
+        p { font-size: 1rem; color: var(--text-light-gray); margin-bottom: 25px; line-height: 1.6; }
 
-        /* --- PROJECT GRID STYLES --- */
+        /* --- PROJECT GRID --- */
         .projects-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;
         }
-
         .project-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 0; /* REMOVED PADDING so image touches edges */
-            text-decoration: none;
+            border-radius: 12px; padding: 0; text-decoration: none;
             transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            overflow: hidden; /* Ensures image respects rounded corners */
+            display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; 
         }
-
         .project-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15); transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-
-        /* NEW: Image Container Styles */
         .project-img {
-            width: 100%;
-            height: 140px; /* Adjust height as needed */
-            background-size: cover;
-            background-position: center;
+            width: 100%; height: 160px; background-size: cover; background-position: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        /* NEW: Wrapper for text content inside the card */
         .project-content {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
+            padding: 20px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;
         }
+        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .project-title { font-weight: bold; font-size: 1.2rem; color: #fff; }
+        .project-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 15px; line-height: 1.4; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; background: var(--accent-blue); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 
-        .project-header {
-            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;
-        }
-        .project-title { font-weight: bold; font-size: 1.1rem; color: #fff; }
-        .project-desc { font-size: 0.85rem; color: #ccc; margin-bottom: 12px; line-height: 1.4; }
-        
-        .tags { display: flex; flex-wrap: wrap; gap: 5px; }
-        .tag { 
-            font-size: 0.7rem; padding: 3px 8px; border-radius: 10px; 
-            background: var(--accent-blue); color: #fff; border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* --- PREVIEW CARD STYLES --- */
+        /* --- PREVIEW CARD --- */
         .embed-container {
-            flex-grow: 1; width: 100%; border-radius: 12px; overflow: hidden; background: #000;
-            min-height: 350px;
+            flex-grow: 1; width: 100%; border-radius: 12px; overflow: hidden; background: #000; min-height: 350px;
         }
         iframe { width: 100%; height: 100%; border: none; }
-
         .site-preview-card {
-            flex-grow: 1; width: 100%;
-            background-size: cover; background-position: top center;
-            border-radius: 12px; position: relative; cursor: pointer;
-            transition: transform 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.3);
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; min-height: 300px;
-            background-color: rgba(0,0,0,0.3);
+            flex-grow: 1; width: 100%; background-size: cover; background-position: top center;
+            border-radius: 12px; position: relative; cursor: pointer; transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center;
+            text-decoration: none; min-height: 300px; background-color: rgba(0,0,0,0.3);
         }
         .site-preview-card:hover { transform: scale(0.99); border-color: #fff; }
         .click-badge {
-            background: rgba(0,0,0,0.8); color: white; padding: 10px 20px;
+            background: rgba(0,0,0,0.8); color: white; padding: 12px 24px;
             border-radius: 30px; border: 1px solid white;
-            font-weight: bold; opacity: 0; transition: opacity 0.3s;
+            font-weight: bold; opacity: 0; transition: opacity 0.3s; font-size: 1.1rem;
         }
         .site-preview-card:hover .click-badge { opacity: 1; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Mobile */
+        /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 768px) {
-            .container { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-end; padding-bottom: 80px; overflow-y: auto;}
-            .box { position: relative; top: auto; left: auto; right: auto; width: 40%; margin: 5px; animation: none; }
-            .modal-window { height: 80vh; padding: 20px; }
-            .social-bar { bottom: 20px; }
+            .container { 
+                display: flex; flex-wrap: wrap; justify-content: center; align-content: center;
+                padding-top: 100px; padding-bottom: 100px; overflow-y: auto; height: 100vh; box-sizing: border-box;
+            }
+            h1 { font-size: 2.2rem; }
+            header { top: 30px; }
+            .social-bar { bottom: 30px; width: 100%; justify-content: center; }
+            .box { 
+                position: relative; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important;
+                width: 40%; margin: 8px; animation: none; transform: none !important; padding: 20px; min-height: 120px;
+                cursor: pointer; /* No drag cursor on mobile */
+            }
             .projects-grid { grid-template-columns: 1fr; }
+            .modal-window { width: 95%; height: 85vh; padding: 20px; }
         }
+        @media (max-width: 400px) { .box { width: 80%; } }
     </style>
 </head>
 <body>
@@ -225,32 +221,34 @@
             <h1>angel wen</h1>
         </header>
 
-        <div class="box pos-1" onclick="openModal('writing')">
+        <!-- REPLACED onclick with data-modal attributes for drag logic -->
+        <div class="box pos-1" data-modal="writing">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Writing</h3><p>Substack</p>
         </div>
-        <div class="box pos-2" onclick="openModal('prototypes')">
+        <div class="box pos-2" data-modal="prototypes">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Prototypes</h3><p>Recent Builds</p>
         </div>
-        <div class="box pos-3" onclick="openModal('about')">
+        <div class="box pos-3" data-modal="about">
              <div class="dots"><div class="dot"></div><div class="dot"></div></div>
              <h3>About</h3><p>The person.</p>
          </div>
-        <div class="box pos-4" onclick="openModal('videos')">
+        <div class="box pos-4" data-modal="videos">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Videos</h3><p>YouTube</p>
         </div>
-        <div class="box pos-5" onclick="openModal('audio')">
+        <div class="box pos-5" data-modal="audio">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Audio</h3><p>SoundCloud</p>
         </div>
-        <div class="box pos-6" onclick="openModal('visuals')">
+        <div class="box pos-6" data-modal="visuals">
             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
             <h3>Visual Art</h3><p>Instagram</p>
         </div>
 
         <div class="social-bar">
+            <!-- Social Links Remained Same -->
             <a href="https://x.com/AngelwenW" target="_blank" class="social-link" title="Twitter / X">
                 <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
@@ -283,9 +281,7 @@
                 <div class="projects-grid">
                     <!-- Project 1 -->
                     <a href="#" class="project-card">
-                        <!-- ADD IMAGE DIV HERE -->
                         <div class="project-img" style="background-image: url('cyclesync.jpg');"></div>
-                        
                         <div class="project-content">
                             <div>
                                 <div class="project-header">
@@ -305,9 +301,7 @@
 
                     <!-- Project 2 -->
                     <a href="#" class="project-card">
-                        <!-- ADD IMAGE DIV HERE -->
                         <div class="project-img" style="background-image: url('waack.jpg');"></div>
-
                         <div class="project-content">
                             <div>
                                 <div class="project-header">
@@ -327,9 +321,7 @@
 
                     <!-- Project 3 -->
                     <a href="#" class="project-card">
-                        <!-- ADD IMAGE DIV HERE -->
                         <div class="project-img" style="background-image: url('citymatch.jpg');"></div>
-
                         <div class="project-content">
                             <div>
                                 <div class="project-header">
@@ -347,7 +339,7 @@
                         </div>
                     </a>
 
-                    <!-- Full Portfolio Link (No image needed, or add one if you like) -->
+                    <!-- Full Portfolio Link -->
                     <a href="https://angelwen.notion.site/Hi-I-m-Angel-Multidisciplinary-Designer-ae1d19707f05452ca2edfd63ca89ccdc?source=copy_link" target="_blank" class="project-card" style="border-color: rgba(255,255,255,0.4);">
                         <div class="project-content">
                             <div>
@@ -434,6 +426,73 @@ If you’re building something aligned, exploring purpose, or simply curious —
                 }
             }
         }
+
+        // --- DRAGGABLE LOGIC ---
+        const boxes = document.querySelectorAll('.box');
+        let zIndexCounter = 100;
+
+        boxes.forEach(box => {
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+            let hasMoved = false;
+
+            box.addEventListener('mousedown', (e) => {
+                // Only enable dragging on larger screens where position is absolute
+                if (window.innerWidth <= 768) return; 
+
+                isDragging = true;
+                hasMoved = false;
+                zIndexCounter++;
+                box.style.zIndex = zIndexCounter;
+                box.style.animation = 'none'; // Pause floating animation while dragging
+                box.style.cursor = 'grabbing';
+
+                // Calculate initial offsets
+                initialLeft = box.offsetLeft;
+                initialTop = box.offsetTop;
+                startX = e.clientX;
+                startY = e.clientY;
+
+                e.preventDefault(); // Prevent text selection
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                // If moved more than 5 pixels, consider it a drag, not a click
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    hasMoved = true;
+                }
+
+                box.style.left = `${initialLeft + dx}px`;
+                box.style.top = `${initialTop + dy}px`;
+            });
+
+            window.addEventListener('mouseup', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                box.style.cursor = 'grab';
+
+                // If it wasn't a drag (just a click), open the modal
+                if (!hasMoved) {
+                    const modalId = box.getAttribute('data-modal');
+                    if (modalId) openModal(modalId);
+                }
+            });
+        });
+        
+        // Handle mobile clicks (since mousedown/up might behave differently or be skipped)
+        boxes.forEach(box => {
+            box.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    const modalId = box.getAttribute('data-modal');
+                    if (modalId) openModal(modalId);
+                }
+            });
+        });
     </script>
 
 </body>
