@@ -73,6 +73,547 @@
             color: white;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease; 
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        
+        .box:active {
+            cursor: grabbing;
+        }
+
+        .box:hover {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 15px rgba(255,255,255,0.1);
+            transform: scale(1.05); z-index: 100;
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Positions - CLUSTERED NEAR CENTER */
+        /* Left Side Cluster */
+        .pos-1 { top: 18%; left: 25%; animation: float 6s ease-in-out infinite; }
+        .pos-2 { top: 45%; left: 20%; animation: float 7s ease-in-out infinite 1s; }
+        .pos-3 { bottom: 18%; left: 25%; animation: float 8s ease-in-out infinite 0.5s; }
+        
+        /* Right Side Cluster */
+        .pos-4 { top: 18%; right: 25%; animation: float 6.5s ease-in-out infinite 2s; }
+        .pos-5 { top: 45%; right: 20%; animation: float 7.5s ease-in-out infinite 1.5s; }
+        .pos-6 { bottom: 18%; right: 25%; animation: float 5.5s ease-in-out infinite 0.2s; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        .dots { display: flex; gap: 6px; margin-bottom: 15px; opacity: 0.9; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: white;}
+        
+        .box h3 { 
+            margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+        }
+        .box p { 
+            margin: 0; font-size: 1rem; color: var(--text-light-gray); font-weight: 500; 
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 999;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal-window {
+            width: 90%; max-width: 800px;
+            background: var(--modal-bg);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            padding: 30px; box-sizing: border-box;
+            transform: translateY(20px); transition: transform 0.3s ease;
+            display: flex; flex-direction: column;
+            max-height: 85vh;
+            overflow-y: auto; 
+        }
+        .modal-overlay.active .modal-window { transform: translateY(0); }
+
+        .close-btn {
+            align-self: flex-end; font-size: 2rem; cursor: pointer; 
+            opacity: 0.8; margin-bottom: 10px; color: #fff;
+            line-height: 1;
+        }
+        .close-btn:hover { opacity: 1; transform: scale(1.1); }
+
+        /* --- CONTENT STYLES --- */
+        .content-section { display: none; height: 100%; }
+        .content-section.active { display: flex; flex-direction: column; animation: fadeIn 0.4s; height: 100%; }
+        
+        h2 { margin: 0 0 15px 0; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 15px; }
+        p { font-size: 1rem; color: var(--text-light-gray); margin-bottom: 25px; line-height: 1.6; }
+
+        /* --- PROJECT GRID --- */
+        .projects-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;
+        }
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; padding: 0; text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; 
+        }
+        .project-card:hover {
+            background: rgba(255, 255, 255, 0.15); transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.5); box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .project-img {
+            width: 100%; height: 160px; background-size: cover; background-position: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .project-content {
+            padding: 20px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1;
+        }
+        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .project-title { font-weight: bold; font-size: 1.2rem; color: #fff; }
+        .project-desc { font-size: 0.9rem; color: #ccc; margin-bottom: 15px; line-height: 1.4; }
+        .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; background: var(--accent-blue); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* --- PREVIEW CARD --- */
+        .embed-container {
+            flex-grow: 1; width: 100%; border-radius: 12px; overflow: hidden; background: #000; min-height: 350px;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+        .site-preview-card {
+            flex-grow: 1; width: 100%; background-size: cover; background-position: top center;
+            border-radius: 12px; position: relative; cursor: pointer; transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center;
+            text-decoration: none; min-height: 300px; background-color: rgba(0,0,0,0.3);
+        }
+        .site-preview-card:hover { transform: scale(0.99); border-color: #fff; }
+        .click-badge {
+            background: rgba(0,0,0,0.8); color: white; padding: 12px 24px;
+            border-radius: 30px; border: 1px solid white;
+            font-weight: bold; opacity: 0; transition: opacity 0.3s; font-size: 1.1rem;
+        }
+        .site-preview-card:hover .click-badge { opacity: 1; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- MOBILE OPTIMIZATION (Updated) --- */
+        @media (max-width: 768px) {
+            .container { 
+                /* Change layout to standard vertical flow */
+                display: flex; 
+                flex-wrap: wrap; 
+                justify-content: center; /* Center horizontally */
+                align-content: flex-start; /* CRITICAL: Align content to top so it doesn't bunch in middle */
+                
+                overflow-y: auto; 
+                height: 100vh; 
+                box-sizing: border-box;
+                padding: 0;
+            }
+
+            /* --- Header: Part of the flow, at top --- */
+            header { 
+                position: relative; 
+                top: auto; 
+                width: 100%;
+                margin-top: 40px;
+                margin-bottom: 20px;
+            }
+            
+            h1 { font-size: 2.2rem; }
+
+            /* --- Boxes: Flow in grid --- */
+            .box { 
+                position: relative; 
+                top: auto !important; 
+                left: auto !important; 
+                right: auto !important; 
+                bottom: auto !important;
+                
+                width: 40%; /* Keep 2-column grid */
+                margin: 8px; 
+                animation: none; 
+                transform: none !important; 
+                padding: 20px; 
+                min-height: 120px;
+                cursor: pointer;
+            }
+
+            /* --- Social Bar: Part of the flow, at bottom --- */
+            .social-bar { 
+                position: relative;
+                bottom: auto;
+                left: auto;
+                transform: none;
+                width: 100%; 
+                justify-content: center; 
+                margin-top: 30px; /* Push away from last boxes */
+                padding-bottom: 40px; /* Space at very bottom */
+            }
+
+            .projects-grid { grid-template-columns: 1fr; }
+            .modal-window { width: 95%; height: 85vh; padding: 20px; }
+        }
+        
+        @media (max-width: 400px) { .box { width: 80%; } }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-container">
+        <header>
+            <h1>angel wen</h1>
+        </header>
+
+        <!-- Boxes -->
+        <div class="box pos-1" data-modal="writing">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Writing</h3><p>Substack</p>
+        </div>
+        <div class="box pos-2" data-modal="prototypes">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Prototypes</h3><p>Recent Builds</p>
+        </div>
+        <div class="box pos-3" data-modal="about">
+             <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+             <h3>About</h3><p>The person.</p>
+         </div>
+        <div class="box pos-4" data-modal="videos">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Videos</h3><p>YouTube</p>
+        </div>
+        <div class="box pos-5" data-modal="audio">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Audio</h3><p>SoundCloud</p>
+        </div>
+        <div class="box pos-6" data-modal="visuals">
+            <div class="dots"><div class="dot"></div><div class="dot"></div></div>
+            <h3>Visual Art</h3><p>Instagram</p>
+        </div>
+
+        <div class="social-bar">
+            <a href="https://x.com/AngelwenW" target="_blank" class="social-link" title="Twitter / X">
+                <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/angel-wen/" target="_blank" class="social-link" title="LinkedIn">
+                <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://instagram.com/creatively.angel" target="_blank" class="social-link" title="Instagram">
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.011-4.849-.069-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="overlay" onclick="closeModal(event)">
+        <div class="modal-window">
+            <div class="close-btn" onclick="closeModal(event, true)">&times;</div>
+
+            <div id="writing" class="content-section">
+                <h2>Writing Archive</h2>
+                <p>Click below to read on Substack.</p>
+                <a href="https://substack.com/@angelwen?" target="_blank" class="site-preview-card" 
+                   style="background-image: url('substack.jpg');">
+                    <div class="click-badge">Open Substack &rarr;</div>
+                </a>
+            </div>
+
+            <div id="prototypes" class="content-section">
+                <h2>Design Prototypes</h2>
+                <p>Experiments in women's health, motion, and community.</p>
+                
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <a href="#" class="project-card">
+                        <div class="project-img" style="background-image: url('cyclesync.jpg');"></div>
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">CycleSync</div>
+                                </div>
+                                <div class="project-desc">
+                                    A tracker for neurodivergent women to map ADHD symptoms to their menstrual cycle.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">Health</span>
+                                <span class="tag">React</span>
+                                <span class="tag">ADHD</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Project 2 -->
+                    <a href="#" class="project-card">
+                        <div class="project-img" style="background-image: url('waack.jpg');"></div>
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">Waack Academy</div>
+                                </div>
+                                <div class="project-desc">
+                                    AI motion tracking app for learning Waacking and syncing movement to rhythm.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">Motion AI</span>
+                                <span class="tag">Dance</span>
+                                <span class="tag">Webcam</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Project 3 -->
+                    <a href="#" class="project-card">
+                        <div class="project-img" style="background-image: url('citymatch.jpg');"></div>
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">CityMatch</div>
+                                </div>
+                                <div class="project-desc">
+                                    Vibe-based relocation finder comparing cities on community, weather & walkability.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">Data</span>
+                                <span class="tag">Lifestyle</span>
+                                <span class="tag">React</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Full Portfolio Link -->
+                    <a href="https://angelwen.notion.site/Hi-I-m-Angel-Multidisciplinary-Designer-ae1d19707f05452ca2edfd63ca89ccdc?source=copy_link" target="_blank" class="project-card" style="border-color: rgba(255,255,255,0.4);">
+                        <div class="project-content">
+                            <div>
+                                <div class="project-header">
+                                    <div class="project-title">Full Portfolio</div>
+                                    <span style="font-size:1.2rem;">&rarr;</span>
+                                </div>
+                                <div class="project-desc">
+                                    View all case studies and detailed documentation on Notion.
+                                </div>
+                            </div>
+                            <div class="tags">
+                                <span class="tag" style="background: white; color: black; font-weight: bold;">Notion</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div id="about" class="content-section">
+                <h2>About Angel</h2>
+                <p>Creative technologist, artist, and explorer.</p>
+                <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2);">
+                    <p style="color:#e0e0e0; margin:0;">"Hi, I’m Angel — a builder, storyteller, and community-driven creator who’s obsessed with helping people find clarity, meaning, and support in the moments they need it most.
+
+I’ve spent the past few years moving between worlds: winning Hack the North with a health-tech app, living as a digital nomad across 10+ countries, growing a YouTube channel to 9,000 subscribers, and creating content that reached over 700,000 views.
+Along the way, I worked as a Product Designer at Hootsuite and later transitioned into Growth + GTM roles for early-stage startups, where I discovered my love for building communities, designing thoughtful experiences, and turning ideas into real products that people feel seen by.
+
+Today, my work lives at the intersection of psychology, women’s health, and neurodivergence.
+
+I care deeply about human flourishing, self-discovery, and creating spaces (digital or in-person) where people feel supported, understood, and connected. Whether it’s designing an app, hosting a circle, or sharing my own journey, my goal is always the same:
+to make the world feel a bit more spacious, soft, and empowering for people who think and feel deeply.
+
+If you’re building something aligned, exploring purpose, or simply curious — I’d love to connect."</p>
+                </div>
+            </div>
+
+            <div id="videos" class="content-section">
+                <h2>Visual diaries and video essays.</h2>
+                <p>On Hiatus</p>
+                <a href="https://www.youtube.com/channel/UCSsOXbbmOAyd-NwaswGkpnQ" target="_blank" class="site-preview-card"
+                   style="background-image: url('youtube.jpg');">
+                    <div class="click-badge">Watch on YouTube &rarr;</div>
+                </a>
+            </div>
+
+            <div id="audio" class="content-section">
+                <h2>Music Logs</h2>
+                <p>Recent Mixes</p>
+                <div class="embed-container">
+                    <iframe scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/l_angemusic&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+                </div>
+            </div>
+
+            <div id="visuals" class="content-section">
+                <h2>Visual Gallery</h2>
+                <p>Latest from Instagram.</p>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="site-preview-card"
+                   style="background-image: url('instagram.jpg');">
+                    <div class="click-badge">Open Instagram &rarr;</div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById('main-container').classList.add('blur');
+            document.getElementById('overlay').classList.add('active');
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(event, force = false) {
+            if (event.target === document.getElementById('overlay') || force) {
+                document.getElementById('main-container').classList.remove('blur');
+                document.getElementById('overlay').classList.remove('active');
+                // Stop videos when closing
+                var iframes = document.getElementsByTagName("iframe");
+                for (var i = 0; i < iframes.length; i++) {
+                    var src = iframes[i].src;
+                    iframes[i].src = src;
+                }
+            }
+        }
+
+        // --- DRAGGABLE LOGIC ---
+        const boxes = document.querySelectorAll('.box');
+        let zIndexCounter = 100;
+
+        boxes.forEach(box => {
+            let isDragging = false;
+            let startX, startY, initialLeft, initialTop;
+            let hasMoved = false;
+
+            box.addEventListener('mousedown', (e) => {
+                // Only enable dragging on larger screens where position is absolute
+                if (window.innerWidth <= 768) return; 
+
+                isDragging = true;
+                hasMoved = false;
+                zIndexCounter++;
+                box.style.zIndex = zIndexCounter;
+                box.style.animation = 'none'; // Pause floating animation while dragging
+                box.style.cursor = 'grabbing';
+
+                // Calculate initial offsets
+                initialLeft = box.offsetLeft;
+                initialTop = box.offsetTop;
+                startX = e.clientX;
+                startY = e.clientY;
+
+                e.preventDefault(); // Prevent text selection
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                // If moved more than 5 pixels, consider it a drag, not a click
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    hasMoved = true;
+                }
+
+                box.style.left = `${initialLeft + dx}px`;
+                box.style.top = `${initialTop + dy}px`;
+            });
+
+            window.addEventListener('mouseup', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                box.style.cursor = 'grab';
+
+                // If it wasn't a drag (just a click), open the modal
+                if (!hasMoved) {
+                    const modalId = box.getAttribute('data-modal');
+                    if (modalId) openModal(modalId);
+                }
+            });
+        });
+        
+        // Handle mobile clicks (since mousedown/up might behave differently or be skipped)
+        boxes.forEach(box => {
+            box.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    const modalId = box.getAttribute('data-modal');
+                    if (modalId) openModal(modalId);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>angel wen</title>
+    <style>
+        /* --- CONFIG --- */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-white: #fff;
+            --text-light-gray: #f0f0f0;
+            --modal-bg: rgba(5, 20, 60, 0.95); 
+            --accent-blue: rgba(100, 200, 255, 0.2);
+        }
+
+        /* --- BODY & BACKGROUND --- */
+        body {
+            margin: 0; padding: 0;
+            font-family: "Courier New", Courier, monospace;
+            height: 100vh; overflow: hidden;
+            color: var(--text-white);
+            background: url('background-wide.jpg') no-repeat center center fixed;
+            background-size: cover; 
+            /* Prevent text selection while dragging */
+            user-select: none;
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            position: relative; width: 100%; height: 100vh;
+            transition: filter 0.3s ease;
+        }
+        .container.blur { filter: blur(8px); pointer-events: none; }
+
+        /* --- HEADER --- */
+        header {
+            position: absolute; top: 40px; width: 100%; text-align: center; z-index: 10;
+            pointer-events: none;
+        }
+        h1 {
+            font-size: 3rem; text-transform: lowercase; 
+            letter-spacing: -2px; margin: 0;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); font-weight: bold;
+        }
+
+        /* --- SOCIAL ICONS --- */
+        .social-bar {
+            position: absolute; bottom: 40px; left: 50%;
+            transform: translateX(-50%); z-index: 20;
+            display: flex; gap: 25px;
+        }
+        .social-link {
+            display: inline-block; opacity: 0.8; transition: all 0.3s ease;
+        }
+        .social-link svg {
+            width: 24px; height: 24px; fill: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        .social-link:hover { opacity: 1; transform: translateY(-3px); }
+
+        /* --- FLOATING BOXES (DESKTOP) --- */
+        .box {
+            position: absolute; 
+            width: 220px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px; 
+            padding: 25px;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            cursor: grab; /* Shows user it can be moved */
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease; 
             /* Note: removed 'all' transition to prevent lag when dragging top/left */
             display: flex; flex-direction: column; justify-content: center;
         }
