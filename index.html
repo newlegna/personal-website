@@ -379,7 +379,7 @@
 
                 <a href="https://sf-third-space-angelwen4490.replit.app/" class="work-card">
 
-                    <div class="work-img" style="background-image: url('thirdspace.jpg');"></div>
+                    <div class="work-img" style="background-image: url('third space.png');"></div>
 
                     <div class="work-info">
 
@@ -417,7 +417,7 @@
 
                 <!-- Full portfolio -->
 
-                <a href="angelwen.notion.site/Hi-I-m-Angel-Product-Founding-Designer-ae1d19707f05452ca2edfd63ca89ccdc" class="work-card">
+                <a href="https://angelwen.notion.site/Hi-I-m-Angel-Product-Founding-Designer-ae1d19707f05452ca2edfd63ca89ccdc" class="work-card">
 
                     <div class="work-img" style="background-color: #333;"></div>
 
@@ -437,9 +437,6 @@
 
         </section>
 
-
-
-        <script>
 
         <!-- BOTTOM NAVIGATION (Moved to Bottom) -->
         <div class="bottom-nav">
@@ -463,139 +460,141 @@
     </div>
 
     <script>
-        // --- PIXEL CANVAS SCRIPT ---
-        const canvas = document.getElementById('pixel-canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let particlesArray;
-
-        // Mouse position
-        let mouse = {
-            x: null,
-            y: null,
-            radius: 100 // Area of influence
-        }
-
-        window.addEventListener('mousemove', function(event) {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
-        
-        // Handle window resize
-        window.addEventListener('resize', function(){
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- PIXEL CANVAS SCRIPT ---
+            const canvas = document.getElementById('pixel-canvas');
+            const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+
+            let particlesArray;
+
+            // Mouse position
+            let mouse = {
+                x: null,
+                y: null,
+                radius: 100 // Area of influence
+            }
+
+            window.addEventListener('mousemove', function(event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function(){
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            });
+
+            class Particle {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = 2; // Size of pixel
+                    this.baseX = this.x;
+                    this.baseY = this.y;
+                    this.density = (Math.random() * 20) + 1; // How heavy/slow they move
+                }
+                draw() {
+                    // Subtle white pixel
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                    ctx.beginPath();
+                    // Draw square for "pixel" look
+                    ctx.rect(this.x, this.y, this.size, this.size);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                update() {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let maxDistance = mouse.radius;
+                    let force = (maxDistance - distance) / maxDistance;
+                    let directionX = forceDirectionX * force * this.density;
+                    let directionY = forceDirectionY * force * this.density;
+
+                    // Move away from mouse
+                    if (distance < mouse.radius) {
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    } else {
+                        // Return to original position
+                        if (this.x !== this.baseX) {
+                            let dx = this.x - this.baseX;
+                            this.x -= dx/10;
+                        }
+                        if (this.y !== this.baseY) {
+                            let dy = this.y - this.baseY;
+                            this.y -= dy/10;
+                        }
+                    }
+                }
+            }
+
+            function initParticles() {
+                particlesArray = [];
+                // Create a grid of particles
+                // Spaced every 25 pixels
+                for (let y = 0; y < canvas.height; y += 25) {
+                    for (let x = 0; x < canvas.width; x += 25) {
+                        particlesArray.push(new Particle(x, y));
+                    }
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].draw();
+                    particlesArray[i].update();
+                }
+                requestAnimationFrame(animateParticles);
+            }
+
             initParticles();
-        });
+            animateParticles();
 
-        class Particle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = 2; // Size of pixel
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = (Math.random() * 20) + 1; // How heavy/slow they move
-            }
-            draw() {
-                // Subtle white pixel
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                ctx.beginPath();
-                // Draw square for "pixel" look
-                ctx.rect(this.x, this.y, this.size, this.size);
-                ctx.closePath();
-                ctx.fill();
-            }
-            update() {
-                let dx = mouse.x - this.x;
-                let dy = mouse.y - this.y;
-                let distance = Math.sqrt(dx*dx + dy*dy);
-                let forceDirectionX = dx / distance;
-                let forceDirectionY = dy / distance;
-                let maxDistance = mouse.radius;
-                let force = (maxDistance - distance) / maxDistance;
-                let directionX = forceDirectionX * force * this.density;
-                let directionY = forceDirectionY * force * this.density;
 
-                // Move away from mouse
-                if (distance < mouse.radius) {
-                    this.x -= directionX;
-                    this.y -= directionY;
-                } else {
-                    // Return to original position
-                    if (this.x !== this.baseX) {
-                        let dx = this.x - this.baseX;
-                        this.x -= dx/10;
-                    }
-                    if (this.y !== this.baseY) {
-                        let dy = this.y - this.baseY;
-                        this.y -= dy/10;
+            // --- CAROUSEL AUTO-SCROLL ---
+            const carousel = document.querySelector('.carousel-container');
+            
+            // Clone items for infinite loop illusion
+            const originalCards = Array.from(carousel.children);
+            originalCards.forEach(card => {
+                const clone = card.cloneNode(true);
+                carousel.appendChild(clone);
+            });
+
+            let scrollSpeed = 1; // Pixels per frame
+            let isHovering = false;
+
+            function autoScrollCarousel() {
+                if (!isHovering) {
+                    carousel.scrollLeft += scrollSpeed;
+                    
+                    // If we've scrolled past the first set of items (halfway point)
+                    // Snap back to 0. Since the second set is identical to the first, 
+                    // this snap is invisible to the user.
+                    if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
+                        carousel.scrollLeft = 0;
                     }
                 }
+                requestAnimationFrame(autoScrollCarousel);
             }
-        }
 
-        function initParticles() {
-            particlesArray = [];
-            // Create a grid of particles
-            // Spaced every 25 pixels
-            for (let y = 0; y < canvas.height; y += 25) {
-                for (let x = 0; x < canvas.width; x += 25) {
-                    particlesArray.push(new Particle(x, y));
-                }
-            }
-        }
+            // Pause on interaction
+            carousel.addEventListener('mouseenter', () => isHovering = true);
+            carousel.addEventListener('mouseleave', () => isHovering = false);
+            carousel.addEventListener('touchstart', () => isHovering = true);
+            carousel.addEventListener('touchend', () => isHovering = false);
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].draw();
-                particlesArray[i].update();
-            }
-            requestAnimationFrame(animateParticles);
-        }
-
-        initParticles();
-        animateParticles();
-
-
-        // --- CAROUSEL AUTO-SCROLL ---
-        const carousel = document.querySelector('.carousel-container');
-        
-        // Clone items for infinite loop illusion
-        const originalCards = Array.from(carousel.children);
-        originalCards.forEach(card => {
-            const clone = card.cloneNode(true);
-            carousel.appendChild(clone);
+            // Start the loop
+            autoScrollCarousel();
         });
-
-        let scrollSpeed = 1; // Pixels per frame
-        let isHovering = false;
-
-        function autoScrollCarousel() {
-            if (!isHovering) {
-                carousel.scrollLeft += scrollSpeed;
-                
-                // If we've scrolled past the first set of items (halfway point)
-                // Snap back to 0. Since the second set is identical to the first, 
-                // this snap is invisible to the user.
-                if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
-                    carousel.scrollLeft = 0;
-                }
-            }
-            requestAnimationFrame(autoScrollCarousel);
-        }
-
-        // Pause on interaction
-        carousel.addEventListener('mouseenter', () => isHovering = true);
-        carousel.addEventListener('mouseleave', () => isHovering = false);
-        carousel.addEventListener('touchstart', () => isHovering = true);
-        carousel.addEventListener('touchend', () => isHovering = false);
-
-        // Start the loop
-        autoScrollCarousel();
     </script>
 
 </body>
