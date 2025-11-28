@@ -128,13 +128,22 @@
         }
         .cta-btn:hover { background: rgba(255,255,255,0.3); }
 
-        .tech-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tech-list { display: flex; flex-wrap: wrap; gap: 10px; }
         .tech-tag {
-            font-size: 0.8rem;
-            padding: 5px 10px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.75rem;
+            padding: 8px 14px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .tech-tag:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
         }
 
         /* --- WORKS SECTION --- */
@@ -155,8 +164,8 @@
         .carousel-container {
             display: flex;
             overflow-x: auto;
-            gap: 30px;
-            padding: 20px 40px;
+            gap: 24px;
+            padding: 20px 40px 40px 40px;
             scroll-behavior: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
@@ -165,27 +174,28 @@
 
         .work-card {
             min-width: 100px;
-            height: 400px;
+            height: 420px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
-            transition: transform 0.3s ease, background 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             flex-shrink: 0;
             text-decoration: none;
             color: white;
-            display: flex; 
+            display: flex;
             flex-direction: column;
-            /* Added blur to cards themselves to make text readable against pixels */
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         .work-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            border-color: rgba(255,255,255,0.3);
         }
 
         .work-img {
@@ -198,16 +208,46 @@
         }
 
         .work-info {
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            gap: 12px;
             height: 45%;
         }
 
-        .work-title { font-size: 1rem; font-weight: bold; margin-bottom: 5px; }
-        .work-category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; margin-bottom: 8px; }
-        .work-desc { font-size: 0.8rem; color: #ddd; line-height: 1.3; }
+        .work-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .work-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 0;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: inline-block;
+            width: fit-content;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .work-card:hover .work-category {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .work-desc {
+            font-size: 0.85rem;
+            color: #e8e8e8;
+            line-height: 1.5;
+            margin: 0;
+        }
 
         /* --- BOTTOM NAV (FOOTER) --- */
         .bottom-nav {
