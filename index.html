@@ -575,61 +575,92 @@
                 }
             }
 
+            // Helper function to generate particles along a line
+            function createLineParticles(x1, y1, x2, y2, spacing = 3) {
+                const particles = [];
+                const distance = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+                const steps = Math.floor(distance / spacing);
+
+                for (let i = 0; i <= steps; i++) {
+                    const t = i / steps;
+                    const x = x1 + (x2 - x1) * t;
+                    const y = y1 + (y2 - y1) * t;
+                    particles.push([x, y]);
+                }
+                return particles;
+            }
+
             // Landmark shape definitions (normalized 0-1 coordinates)
-            function getLandmarkShapes() {
-                return {
-                    // Vancouver Mountains (left side)
-                    mountains: [
-                        [0.05, 0.6], [0.08, 0.55], [0.11, 0.5], [0.14, 0.48], [0.17, 0.45],
-                        [0.2, 0.5], [0.23, 0.53], [0.26, 0.5], [0.29, 0.47], [0.32, 0.45],
-                        [0.35, 0.48], [0.38, 0.52], [0.41, 0.55], [0.44, 0.58], [0.47, 0.6]
-                    ],
-                    // Vancouver building (CN Tower-ish)
-                    tower: [
-                        [0.15, 0.65], [0.15, 0.6], [0.15, 0.55], [0.15, 0.5], [0.15, 0.45],
-                        [0.15, 0.4], [0.14, 0.4], [0.16, 0.4], [0.14, 0.42], [0.16, 0.42]
-                    ],
-                    // Asian Pagoda (right side)
-                    pagoda: [
-                        // Base
-                        [0.75, 0.65], [0.78, 0.65], [0.81, 0.65],
-                        // Level 1
-                        [0.74, 0.62], [0.75, 0.62], [0.76, 0.62], [0.77, 0.62], [0.78, 0.62],
-                        [0.79, 0.62], [0.80, 0.62], [0.81, 0.62], [0.82, 0.62],
-                        // Level 2
-                        [0.76, 0.58], [0.77, 0.58], [0.78, 0.58], [0.79, 0.58], [0.80, 0.58],
-                        // Level 3
-                        [0.77, 0.54], [0.78, 0.54], [0.79, 0.54],
-                        // Spire
-                        [0.78, 0.52], [0.78, 0.5], [0.78, 0.48]
-                    ],
-                    // Temple roof (center-right)
-                    temple: [
-                        [0.55, 0.55], [0.58, 0.52], [0.61, 0.5], [0.64, 0.48], [0.67, 0.5],
-                        [0.70, 0.52], [0.73, 0.55], [0.60, 0.58], [0.62, 0.58], [0.64, 0.58],
-                        [0.66, 0.58], [0.68, 0.58]
-                    ]
-                };
+            function getLandmarkShapes(width, height) {
+                const particles = [];
+
+                // Vancouver Mountains (left side) - more detailed mountain range
+                const mountainPoints = [
+                    [0.05, 0.7], [0.08, 0.65], [0.11, 0.58], [0.14, 0.52], [0.17, 0.48],
+                    [0.20, 0.52], [0.23, 0.58], [0.26, 0.54], [0.29, 0.48], [0.32, 0.42],
+                    [0.35, 0.45], [0.38, 0.50], [0.41, 0.56], [0.44, 0.62], [0.47, 0.68], [0.50, 0.7]
+                ];
+                for (let i = 0; i < mountainPoints.length - 1; i++) {
+                    const [x1, y1] = mountainPoints[i];
+                    const [x2, y2] = mountainPoints[i + 1];
+                    const lineParticles = createLineParticles(x1 * width, y1 * height, x2 * width, y2 * height, 3);
+                    particles.push(...lineParticles);
+                }
+
+                // Asian Pagoda (right side) - detailed multi-tier structure
+                // Spire
+                const spireParticles = createLineParticles(0.82 * width, 0.35 * height, 0.82 * width, 0.45 * height, 3);
+                particles.push(...spireParticles);
+
+                // Top tier roof
+                const topRoofLeft = createLineParticles(0.82 * width, 0.45 * height, 0.79 * width, 0.48 * height, 2);
+                const topRoofRight = createLineParticles(0.82 * width, 0.45 * height, 0.85 * width, 0.48 * height, 2);
+                particles.push(...topRoofLeft, ...topRoofRight);
+
+                // Middle tier
+                const midBody = createLineParticles(0.80 * width, 0.48 * height, 0.80 * width, 0.52 * height, 3);
+                const midBody2 = createLineParticles(0.84 * width, 0.48 * height, 0.84 * width, 0.52 * height, 3);
+                particles.push(...midBody, ...midBody2);
+
+                // Middle roof
+                const midRoofLeft = createLineParticles(0.80 * width, 0.52 * height, 0.77 * width, 0.55 * height, 2);
+                const midRoofRight = createLineParticles(0.84 * width, 0.52 * height, 0.87 * width, 0.55 * height, 2);
+                particles.push(...midRoofLeft, ...midRoofRight);
+
+                // Bottom tier
+                const botBody = createLineParticles(0.78 * width, 0.55 * height, 0.78 * width, 0.62 * height, 3);
+                const botBody2 = createLineParticles(0.86 * width, 0.55 * height, 0.86 * width, 0.62 * height, 3);
+                particles.push(...botBody, ...botBody2);
+
+                // Bottom roof
+                const botRoofLeft = createLineParticles(0.78 * width, 0.62 * height, 0.74 * width, 0.66 * height, 2);
+                const botRoofRight = createLineParticles(0.86 * width, 0.62 * height, 0.90 * width, 0.66 * height, 2);
+                const botRoofBase = createLineParticles(0.74 * width, 0.66 * height, 0.90 * width, 0.66 * height, 2);
+                particles.push(...botRoofLeft, ...botRoofRight, ...botRoofBase);
+
+                // Temple Gate (center-right) - Asian temple entrance
+                const gateLeft = createLineParticles(0.55 * width, 0.65 * height, 0.55 * width, 0.50 * height, 3);
+                const gateRight = createLineParticles(0.65 * width, 0.65 * height, 0.65 * width, 0.50 * height, 3);
+                const gateRoofLeft = createLineParticles(0.55 * width, 0.50 * height, 0.52 * width, 0.46 * height, 2);
+                const gateRoofRight = createLineParticles(0.65 * width, 0.50 * height, 0.68 * width, 0.46 * height, 2);
+                const gateRoofPeak = createLineParticles(0.52 * width, 0.46 * height, 0.68 * width, 0.46 * height, 2);
+                particles.push(...gateLeft, ...gateRight, ...gateRoofLeft, ...gateRoofRight, ...gateRoofPeak);
+
+                return particles;
             }
 
             function initParticles() {
                 particlesArray = [];
 
                 // Add landmark particles
-                const landmarks = getLandmarkShapes();
-                for (let landmarkName in landmarks) {
-                    const shape = landmarks[landmarkName];
-                    shape.forEach(([normalizedX, normalizedY]) => {
-                        const x = normalizedX * canvas.width;
-                        const y = normalizedY * canvas.height;
-                        particlesArray.push(new Particle(x, y));
-                    });
-                }
+                const landmarkParticles = getLandmarkShapes(canvas.width, canvas.height);
+                landmarkParticles.forEach(([x, y]) => {
+                    particlesArray.push(new Particle(x, y));
+                });
 
-                // Add sparse background grid
-                for (let y = 0; y < canvas.height; y += 50) {
-                    for (let x = 0; x < canvas.width; x += 50) {
-                        // Skip if too close to landmarks to avoid clutter
+                // Add very sparse background grid
+                for (let y = 0; y < canvas.height; y += 80) {
+                    for (let x = 0; x < canvas.width; x += 80) {
                         particlesArray.push(new Particle(x, y));
                     }
                 }
