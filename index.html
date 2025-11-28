@@ -575,12 +575,61 @@
                 }
             }
 
+            // Landmark shape definitions (normalized 0-1 coordinates)
+            function getLandmarkShapes() {
+                return {
+                    // Vancouver Mountains (left side)
+                    mountains: [
+                        [0.05, 0.6], [0.08, 0.55], [0.11, 0.5], [0.14, 0.48], [0.17, 0.45],
+                        [0.2, 0.5], [0.23, 0.53], [0.26, 0.5], [0.29, 0.47], [0.32, 0.45],
+                        [0.35, 0.48], [0.38, 0.52], [0.41, 0.55], [0.44, 0.58], [0.47, 0.6]
+                    ],
+                    // Vancouver building (CN Tower-ish)
+                    tower: [
+                        [0.15, 0.65], [0.15, 0.6], [0.15, 0.55], [0.15, 0.5], [0.15, 0.45],
+                        [0.15, 0.4], [0.14, 0.4], [0.16, 0.4], [0.14, 0.42], [0.16, 0.42]
+                    ],
+                    // Asian Pagoda (right side)
+                    pagoda: [
+                        // Base
+                        [0.75, 0.65], [0.78, 0.65], [0.81, 0.65],
+                        // Level 1
+                        [0.74, 0.62], [0.75, 0.62], [0.76, 0.62], [0.77, 0.62], [0.78, 0.62],
+                        [0.79, 0.62], [0.80, 0.62], [0.81, 0.62], [0.82, 0.62],
+                        // Level 2
+                        [0.76, 0.58], [0.77, 0.58], [0.78, 0.58], [0.79, 0.58], [0.80, 0.58],
+                        // Level 3
+                        [0.77, 0.54], [0.78, 0.54], [0.79, 0.54],
+                        // Spire
+                        [0.78, 0.52], [0.78, 0.5], [0.78, 0.48]
+                    ],
+                    // Temple roof (center-right)
+                    temple: [
+                        [0.55, 0.55], [0.58, 0.52], [0.61, 0.5], [0.64, 0.48], [0.67, 0.5],
+                        [0.70, 0.52], [0.73, 0.55], [0.60, 0.58], [0.62, 0.58], [0.64, 0.58],
+                        [0.66, 0.58], [0.68, 0.58]
+                    ]
+                };
+            }
+
             function initParticles() {
                 particlesArray = [];
-                // Create a grid of particles
-                // Spaced every 25 pixels
-                for (let y = 0; y < canvas.height; y += 25) {
-                    for (let x = 0; x < canvas.width; x += 25) {
+
+                // Add landmark particles
+                const landmarks = getLandmarkShapes();
+                for (let landmarkName in landmarks) {
+                    const shape = landmarks[landmarkName];
+                    shape.forEach(([normalizedX, normalizedY]) => {
+                        const x = normalizedX * canvas.width;
+                        const y = normalizedY * canvas.height;
+                        particlesArray.push(new Particle(x, y));
+                    });
+                }
+
+                // Add sparse background grid
+                for (let y = 0; y < canvas.height; y += 50) {
+                    for (let x = 0; x < canvas.width; x += 50) {
+                        // Skip if too close to landmarks to avoid clutter
                         particlesArray.push(new Particle(x, y));
                     }
                 }
