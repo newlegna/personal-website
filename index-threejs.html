@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>angel wen × dimensional</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        #cursor.active {
+            transform: scale(2);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Three.js Canvas */
+        #scene-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        /* Content Overlay */
+        .content {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .content * {
+            pointer-events: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 100;
+            letter-spacing: -0.05em;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #00ffff, #ff00ff, #fff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 8s ease infinite;
+            text-transform: lowercase;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            opacity: 0.8;
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-btn {
+            padding: 15px 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .cta-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Projects Grid */
+        .projects-section {
+            min-height: 100vh;
+            padding: 100px 40px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 6vw, 4rem);
+            text-align: center;
+            margin-bottom: 80px;
+            font-weight: 100;
+            letter-spacing: -0.02em;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            position: relative;
+            aspect-ratio: 4/5;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-image {
+            width: 100%;
+            height: 60%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-image {
+            transform: scale(1.1);
+        }
+
+        .project-info {
+            padding: 25px;
+            position: relative;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .project-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator::before {
+            content: '↓';
+            font-size: 2rem;
+            opacity: 0.5;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .contact-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-bottom: 2px solid transparent;
+        }
+
+        .contact-link:hover {
+            opacity: 1;
+            border-bottom-color: white;
+        }
+
+        /* Loading Screen */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease;
+        }
+
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor"></div>
+
+    <!-- Three.js Scene -->
+    <div id="scene-container"></div>
+
+    <!-- Content Overlay -->
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>angel wen</h1>
+            <p>Design Engineer & Creative Technologist crafting interfaces for the agentic web. Building the future of human-computer interaction.</p>
+            <div class="cta-buttons">
+                <a href="#projects" class="cta-btn">explore work</a>
+                <a href="mailto:angel@example.com" class="cta-btn">get in touch</a>
+            </div>
+            <div class="scroll-indicator"></div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="projects-section">
+            <h2 class="section-title">selected works</h2>
+            <div class="projects-grid">
+
+                <a href="https://www.notion.so/angelwen/Nomad-Building-the-Linkedin-for-High-End-Animation-Studios-90bf1cafb0334547b0e6aec11db6e0ce?source=copy_link" class="project-card" target="_blank">
+                    <img src="nomad.jpg" alt="Nomad" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">Nomad</h3>
+                        <span class="project-category">Product Design • React</span>
+                        <p class="project-desc">Building the LinkedIn for high-end animation studios</p>
+                    </div>
+                </a>
+
+                <a href="https://www.notion.so/angelwen/Gamifying-dance-practice-with-computer-vision-2b4f51a4053080d28755d79577a580ac?source=copy_link" class="project-card" target="_blank">
+                    <img src="waack.jpg" alt="Waack Academy" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">Waack Academy</h3>
+                        <span class="project-category">AI & Motion</span>
+                        <p class="project-desc">Computer vision teaching dance rhythm and positioning in real-time</p>
+                    </div>
+                </a>
+
+                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" class="project-card" target="_blank">
+                    <img src="interactiveorchestra.jpg" alt="Interactive Orchestra" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">Interactive Orchestra</h3>
+                        <span class="project-category">VR • Experience</span>
+                        <p class="project-desc">VR simulation helping conductors learn in virtual reality</p>
+                    </div>
+                </a>
+
+                <a href="#" class="project-card">
+                    <img src="invisibleviolin.jpg" alt="Invisible Violin" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">Invisible Violin</h3>
+                        <span class="project-category">Interactive • Music</span>
+                        <p class="project-desc">Exploring the intersection of gesture and sound</p>
+                    </div>
+                </a>
+
+                <a href="https://sf-third-space-angelwen4490.replit.app/" class="project-card" target="_blank">
+                    <img src="third space.png" alt="Third Space" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">Third Space</h3>
+                        <span class="project-category">Data Viz</span>
+                        <p class="project-desc">Mapping third spaces across San Francisco</p>
+                    </div>
+                </a>
+
+                <a href="https://www.notion.so/angelwen/Hootsuite-Enterprise-Feature-Design-40e0bfc50ed1497a957db3a607aed49c?source=copy_link" class="project-card" target="_blank">
+                    <img src="hootsuite.jpg" alt="Hootsuite" class="project-image">
+                    <div class="project-info">
+                        <h3 class="project-title">Hootsuite Design</h3>
+                        <span class="project-category">Data Visualization</span>
+                        <p class="project-desc">Enterprise feature design for social media platform</p>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <h2 class="section-title">let's connect</h2>
+            <p style="opacity: 0.8; max-width: 600px; margin: 0 auto;">Currently relocating to SF • TN Visa Eligible • Building with Next.js, MediaPipe, RWKV, Vapi</p>
+            <div class="contact-links">
+                <a href="https://x.com/AngelwenW" target="_blank" class="contact-link">Twitter</a>
+                <a href="https://www.linkedin.com/in/angel-wen/" target="_blank" class="contact-link">LinkedIn</a>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="contact-link">Instagram</a>
+                <a href="https://substack.com/@angelwen?" target="_blank" class="contact-link">Writing</a>
+                <a href="https://www.youtube.com/channel/UCSsOXbbmOAyd-NwaswGkpnQ" target="_blank" class="contact-link">YouTube</a>
+                <a href="https://soundcloud.com/l_angemusic" target="_blank" class="contact-link">SoundCloud</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Three.js Scene
+        const container = document.getElementById('scene-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        camera.position.z = 50;
+
+        // Particle System
+        const particleCount = 3000;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        const sizes = new Float32Array(particleCount);
+
+        for (let i = 0; i < particleCount; i++) {
+            // Position
+            positions[i * 3] = (Math.random() - 0.5) * 200;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
+
+            // Colors (cyan to magenta gradient)
+            const color = new THREE.Color();
+            color.setHSL(Math.random() * 0.3 + 0.5, 0.8, 0.6);
+            colors[i * 3] = color.r;
+            colors[i * 3 + 1] = color.g;
+            colors[i * 3 + 2] = color.b;
+
+            // Size
+            sizes[i] = Math.random() * 2 + 1;
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+        const material = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 }
+            },
+            vertexShader: `
+                attribute float size;
+                attribute vec3 color;
+                varying vec3 vColor;
+                uniform float time;
+
+                void main() {
+                    vColor = color;
+                    vec3 pos = position;
+
+                    // Wave motion
+                    pos.y += sin(pos.x * 0.1 + time) * 2.0;
+                    pos.x += cos(pos.z * 0.1 + time) * 2.0;
+
+                    vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                    gl_PointSize = size * (300.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vColor;
+
+                void main() {
+                    // Circular point
+                    vec2 center = gl_PointCoord - vec2(0.5);
+                    float dist = length(center);
+                    if (dist > 0.5) discard;
+
+                    // Soft edges
+                    float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
+                    gl_FragColor = vec4(vColor, alpha * 0.8);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            vertexColors: true
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+
+        // Floating Geometric Shapes
+        const shapes = [];
+        const shapeGeometries = [
+            new THREE.IcosahedronGeometry(2, 0),
+            new THREE.OctahedronGeometry(2),
+            new THREE.TetrahedronGeometry(2)
+        ];
+
+        for (let i = 0; i < 10; i++) {
+            const geom = shapeGeometries[Math.floor(Math.random() * shapeGeometries.length)];
+            const mat = new THREE.MeshPhongMaterial({
+                color: new THREE.Color().setHSL(Math.random(), 0.7, 0.5),
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3
+            });
+            const mesh = new THREE.Mesh(geom, mat);
+
+            mesh.position.set(
+                (Math.random() - 0.5) * 100,
+                (Math.random() - 0.5) * 100,
+                (Math.random() - 0.5) * 100
+            );
+
+            mesh.rotation.set(
+                Math.random() * Math.PI,
+                Math.random() * Math.PI,
+                Math.random() * Math.PI
+            );
+
+            shapes.push({
+                mesh,
+                rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.01,
+                    y: (Math.random() - 0.5) * 0.01,
+                    z: (Math.random() - 0.5) * 0.01
+                }
+            });
+
+            scene.add(mesh);
+        }
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const pointLight1 = new THREE.PointLight(0x00ffff, 2, 100);
+        pointLight1.position.set(50, 50, 50);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xff00ff, 2, 100);
+        pointLight2.position.set(-50, -50, 50);
+        scene.add(pointLight2);
+
+        // Mouse interaction
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            targetRotationY = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            targetRotationX = (e.clientY / window.innerHeight - 0.5) * 0.5;
+        });
+
+        // Scroll-based camera movement
+        let scrollY = 0;
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+
+        // Animation Loop
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            // Update shader time
+            material.uniforms.time.value = time;
+
+            // Rotate particles
+            particles.rotation.y += 0.001;
+            particles.rotation.x += (targetRotationX - particles.rotation.x) * 0.05;
+            particles.rotation.y += (targetRotationY - particles.rotation.y) * 0.05;
+
+            // Animate shapes
+            shapes.forEach(shape => {
+                shape.mesh.rotation.x += shape.rotationSpeed.x;
+                shape.mesh.rotation.y += shape.rotationSpeed.y;
+                shape.mesh.rotation.z += shape.rotationSpeed.z;
+
+                // Floating motion
+                shape.mesh.position.y += Math.sin(time + shape.mesh.position.x) * 0.02;
+            });
+
+            // Camera movement based on scroll
+            camera.position.y = -(scrollY * 0.02);
+            camera.position.z = 50 - (scrollY * 0.01);
+
+            // Animate lights
+            pointLight1.position.x = Math.sin(time * 0.5) * 50;
+            pointLight1.position.y = Math.cos(time * 0.3) * 50;
+            pointLight2.position.x = Math.cos(time * 0.4) * 50;
+            pointLight2.position.y = Math.sin(time * 0.6) * 50;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start animation
+        animate();
+
+        // Hide loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 500);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
