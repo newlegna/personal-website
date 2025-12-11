@@ -686,6 +686,101 @@
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
+        /* --- ART GALLERY SECTION --- */
+        .art-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .art-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .art-card {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .art-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .art-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .art-card:hover .art-img {
+            transform: scale(1.08);
+        }
+
+        .art-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .art-card:hover .art-overlay {
+            opacity: 1;
+        }
+
+        .art-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            margin: 0 0 5px 0;
+        }
+
+        .art-medium {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .art-section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .art-section-subtitle {
+            font-size: 1rem;
+            color: var(--text-gray);
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .art-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 0 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             .featured-grid {
                 grid-template-columns: 1fr;
@@ -913,7 +1008,7 @@
                     <img src="logo.png" alt="Angel Wen" class="bio-img">
                     <div class="bio-content">
                         <h1>Angel Wen</h1>
-                        <p>Design Engineer & Creative Technologist.<br>Building interfaces for the agentic web.</p>
+                        <p>Artist, Designer, and Creative Technologist.<br>Building interfaces for the agentic web.</p>
                         <div class="cta-group">
                             <button id="email-btn" class="cta-btn" onclick="copyEmail()">Copy Email</button>
                             <a href="#" class="cta-btn" target="_blank">View Resume</a>
@@ -942,7 +1037,7 @@
         <div class="marquee-container">
             <div class="marquee-track">
                 <div class="marquee-content">
-                    <span class="marquee-item">Design Engineer</span>
+                    <span class="marquee-item">Artist</span>
                     <span class="marquee-separator">✦</span>
                     <span class="marquee-item">Creative Technologist</span>
                     <span class="marquee-separator">✦</span>
@@ -958,7 +1053,7 @@
                     <span class="marquee-separator">✦</span>
                 </div>
                 <div class="marquee-content">
-                    <span class="marquee-item">Design Engineer</span>
+                    <span class="marquee-item">Artist</span>
                     <span class="marquee-separator">✦</span>
                     <span class="marquee-item">Creative Technologist</span>
                     <span class="marquee-separator">✦</span>
@@ -1204,31 +1299,120 @@
 
                 </a>
 
+            </div>
 
+        </section>
 
-                <!-- Full portfolio -->
+        <!-- ART GALLERY SECTION -->
+        <section class="works-section">
 
-                <a href="https://angelwen.notion.site/Hi-I-m-Angel-Product-Founding-Designer-ae1d19707f05452ca2edfd63ca89ccdc"
-                    class="work-card">
+            <h2 class="section-title">my art</h2>
 
-                    <div class="work-img" style="background-color: #333;"></div>
+            <div class="carousel-container">
 
+                <!-- Artwork 1 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_1.jpg');"></div>
                     <div class="work-info">
-
-                        <div class="work-title">Future Project</div>
-
-                        <div class="work-category">Exploration</div>
-
-                        <div class="work-desc">Upcoming experiments in spatial computing and community building.</div>
-
+                        <div class="work-title">Dreamscape I</div>
+                        <div class="work-category">Digital Art</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
                     </div>
+                </a>
 
+                <!-- Artwork 2 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_2.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Ethereal Flow</div>
+                        <div class="work-category">Mixed Media</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 3 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_3.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Abstract Harmony</div>
+                        <div class="work-category">Acrylic</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 4 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_4.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Color Study</div>
+                        <div class="work-category">Watercolor</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 5 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_5.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Motion Blur</div>
+                        <div class="work-category">Photography</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 6 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_6.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Neon Dreams</div>
+                        <div class="work-category">Digital Art</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 7 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_7.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Organic Forms</div>
+                        <div class="work-category">Sculpture</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 8 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_8.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Urban Canvas</div>
+                        <div class="work-category">Street Art</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 9 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_9.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Celestial</div>
+                        <div class="work-category">Oil Paint</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 10 -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
+                    <div class="work-img" style="background-image: url('art_10.jpg');"></div>
+                    <div class="work-info">
+                        <div class="work-title">Fragments</div>
+                        <div class="work-category">Collage</div>
+                        <div class="work-desc">Creative exploration in visual expression</div>
+                    </div>
                 </a>
 
             </div>
 
         </section>
-
 
         <!-- BOTTOM NAVIGATION (Moved to Bottom) -->
         <div class="bottom-nav">
@@ -1296,7 +1480,7 @@
             animateCursor();
 
             // Cursor hover effect on interactive elements
-            const interactiveElements = document.querySelectorAll('a, button, .work-card, .featured-card, .bento-box, .craft-item');
+            const interactiveElements = document.querySelectorAll('a, button, .work-card, .featured-card, .bento-box, .craft-item, .art-card');
             interactiveElements.forEach(el => {
                 el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
