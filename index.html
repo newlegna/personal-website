@@ -330,11 +330,12 @@
         /* --- BENTO GRID SYSTEM --- */
         .bento-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            /* 50% - 25% - 25% */
+            grid-template-columns: 2fr 1fr;
+            /* 66% - 33% */
             gap: 20px;
             width: 100%;
             max-width: 1100px;
+            justify-content: center;
         }
 
         .bento-box {
@@ -686,13 +687,58 @@
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
-        /* --- ART GALLERY SECTION --- */
-        .art-section {
+        /* --- ART GALLERY MODAL --- */
+        .art-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .art-modal.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .art-modal-content {
             padding: 80px 20px;
             max-width: 1200px;
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
+            position: relative;
+        }
+
+        .art-modal-close {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 10001;
+            backdrop-filter: blur(10px);
+        }
+
+        .art-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
         }
 
         .art-grid {
@@ -778,6 +824,14 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
                 padding: 0 10px;
+            }
+
+            .art-modal-close {
+                top: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
             }
         }
 
@@ -879,6 +933,55 @@
         }
 
         /* --- BOTTOM NAV (FOOTER) --- */
+        /* --- SCROLL INDICATOR --- */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator-text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .scroll-indicator-arrow {
+            width: 24px;
+            height: 24px;
+            border-left: 2px solid rgba(255, 255, 255, 0.7);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+            transform: rotate(-45deg);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                bottom: 20px;
+            }
+        }
+
         .bottom-nav {
             width: 100%;
             display: flex;
@@ -1008,28 +1111,27 @@
                     <img src="logo.png" alt="Angel Wen" class="bio-img">
                     <div class="bio-content">
                         <h1>Angel Wen</h1>
-                        <p>Artist, Designer, and Creative Technologist.<br>Building interfaces for the agentic web.</p>
+                        <p>Product Designer specializing in user-centered design and AI products.<br>I solve complex problems through research, iteration, and collaboration.</p>
                         <div class="cta-group">
                             <button id="email-btn" class="cta-btn" onclick="copyEmail()">Copy Email</button>
-                            <a href="#" class="cta-btn" target="_blank">View Resume</a>
+                            <span class="cta-btn" style="background: rgba(100, 200, 255, 0.2); border-color: rgba(100, 200, 255, 0.3); cursor: default;">✨ Open to Opportunities</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Box 2: Philosophy (Medium) -->
                 <div class="bento-box">
-                    <h3>Philosophy</h3>
-                    <p style="font-style: italic; opacity: 0.9;">"The best interfaces disappear."</p>
-                    <p style="margin-top: 10px; font-size: 0.9rem;">I design for humans who want to feel like wizards.
+                    <h3>Design Philosophy</h3>
+                    <p style="font-style: italic; opacity: 0.9;">"Great product design starts with deep user empathy and ends with measurable impact."</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Every pixel should serve a purpose, every interaction should feel intuitive.
                     </p>
                 </div>
+            </div>
 
-                <!-- Box 3: Status (Medium) -->
-                <div class="bento-box">
-                    <h3>Status</h3>
-                    <p>✨ Open to opportunities</p>
-                    <p style="margin-top: 10px;">🎯 Building the future of interaction</p>
-                </div>
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
+                <span class="scroll-indicator-text">Scroll to see work</span>
+                <div class="scroll-indicator-arrow"></div>
             </div>
         </section>
 
@@ -1037,35 +1139,35 @@
         <div class="marquee-container">
             <div class="marquee-track">
                 <div class="marquee-content">
-                    <span class="marquee-item">Artist</span>
+                    <span class="marquee-item">Product Designer</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Creative Technologist</span>
+                    <span class="marquee-item">User Research</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Builder</span>
+                    <span class="marquee-item">Prototyping</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Dreamer</span>
+                    <span class="marquee-item">Design Systems</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Music</span>
+                    <span class="marquee-item">Data Visualization</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Motion</span>
+                    <span class="marquee-item">Interaction Design</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Interaction</span>
+                    <span class="marquee-item">Visual Design</span>
                     <span class="marquee-separator">✦</span>
                 </div>
                 <div class="marquee-content">
-                    <span class="marquee-item">Artist</span>
+                    <span class="marquee-item">Product Designer</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Creative Technologist</span>
+                    <span class="marquee-item">User Research</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Builder</span>
+                    <span class="marquee-item">Prototyping</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Dreamer</span>
+                    <span class="marquee-item">Design Systems</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Music</span>
+                    <span class="marquee-item">Data Visualization</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Motion</span>
+                    <span class="marquee-item">Interaction Design</span>
                     <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Interaction</span>
+                    <span class="marquee-item">Visual Design</span>
                     <span class="marquee-separator">✦</span>
                 </div>
             </div>
@@ -1073,227 +1175,123 @@
 
         <!-- CRAFT & TOOLS SECTION -->
         <section class="craft-section animate-on-scroll">
-            <h3 class="craft-title">Tools & Technologies</h3>
+            <h3 class="craft-title">Design Tools & Skills</h3>
             <div class="craft-grid">
-                <span class="craft-item">MediaPipe</span>
-                <span class="craft-item">Next.js</span>
-                <span class="craft-item">Three.js</span>
-                <span class="craft-item">WebAudio API</span>
                 <span class="craft-item">Figma</span>
+                <span class="craft-item">Adobe XD</span>
+                <span class="craft-item">Sketch</span>
+                <span class="craft-item">Prototyping</span>
+                <span class="craft-item">User Research</span>
+                <span class="craft-item">Wireframing</span>
                 <span class="craft-item">React</span>
-                <span class="craft-item">TypeScript</span>
-                <span class="craft-item">Python</span>
-                <span class="craft-item">TensorFlow</span>
-                <span class="craft-item">Unity</span>
+                <span class="craft-item">Design Systems</span>
+                <span class="craft-item">Miro</span>
+                <span class="craft-item">Three.js</span>
             </div>
         </section>
 
         <!-- FEATURED PROJECTS SECTION -->
         <section class="featured-section">
-            <h2 class="section-title animate-on-scroll">Featured Work</h2>
+            <h2 class="section-title animate-on-scroll">Featured Product Design Work</h2>
             <div class="featured-grid">
-                <!-- Featured: Invisible Violin -->
-                <a href="#" class="featured-card animate-on-scroll stagger-1">
-                    <div class="featured-img" style="background-image: url('invisibleviolin.jpg');"></div>
+                <!-- Featured: Nomad -->
+                <a href="https://www.notion.so/angelwen/Nomad-Building-the-Linkedin-for-High-End-Animation-Studios-90bf1cafb0334547b0e6aec11db6e0ce?source=copy_link"
+                    class="featured-card animate-on-scroll stagger-1" target="_blank">
+                    <div class="featured-img" style="background-image: url('nomad.jpg');"></div>
                     <div class="featured-info">
-                        <h3 class="featured-title">Invisible Violin</h3>
-                        <p class="featured-desc">An interactive music experience exploring the intersection of gesture
-                            and sound. Play a virtual violin using just your hand movements in the browser.</p>
+                        <h3 class="featured-title">Nomad</h3>
+                        <p class="featured-desc"><strong>Problem:</strong> High-end animation studios struggled to find and vet specialized talent across a fragmented industry.<br><br>
+                        <strong>Solution:</strong> Designed a professional networking platform with intuitive profile creation, portfolio showcasing, and studio-to-artist matching flows. Created a design system emphasizing visual storytelling for creative professionals.</p>
                         <div class="featured-tags">
-                            <span class="tag tag-music">MUSIC</span>
-                            <span class="tag tag-ai">AI</span>
+                            <span class="tag tag-design">PRODUCT DESIGN</span>
+                            <span class="tag tag-data">UX RESEARCH</span>
                         </div>
                     </div>
                 </a>
 
-                <!-- Featured: Interactive Orchestra -->
-                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank"
-                    class="featured-card animate-on-scroll stagger-2">
-                    <div class="featured-img" style="background-image: url('interactiveorchestra.jpg');"></div>
+                <!-- Featured: Hootsuite -->
+                <a href="https://www.notion.so/angelwen/Hootsuite-Enterprise-Feature-Design-40e0bfc50ed1497a957db3a607aed49c?source=copy_link"
+                    class="featured-card animate-on-scroll stagger-2" target="_blank">
+                    <div class="featured-img" style="background-image: url('hootsuite.jpg');"></div>
                     <div class="featured-info">
-                        <h3 class="featured-title">Interactive Orchestra</h3>
-                        <p class="featured-desc">VR project that helps conductors learn how to conduct in a simulated
-                            reality with real-time feedback and immersive orchestral environments.</p>
+                        <h3 class="featured-title">Hootsuite Enterprise</h3>
+                        <p class="featured-desc"><strong>Problem:</strong> Enterprise teams needed clearer insights into social media performance across multiple channels.<br><br>
+                        <strong>Solution:</strong> Designed data visualization dashboards that transformed complex analytics into actionable insights. Created customizable reporting interfaces for different stakeholder needs.</p>
                         <div class="featured-tags">
-                            <span class="tag tag-vr">VR</span>
-                            <span class="tag tag-design">EXPERIENCE</span>
+                            <span class="tag tag-data">DATA VIZ</span>
+                            <span class="tag tag-design">ENTERPRISE UX</span>
                         </div>
                     </div>
                 </a>
             </div>
         </section>
 
-        <!-- WORKS SECTION (Below the Fold) -->
+        <!-- ADDITIONAL WORK SECTION -->
 
-        <section class="works-section">
+        <section class="featured-section">
 
-            <h2 class="section-title">Selected Works in Design</h2>
+            <h2 class="section-title">Additional Work</h2>
 
-
-
-            <div class="carousel-container">
-
-                <!-- Nomad -->
-
-                <a href="https://www.notion.so/angelwen/Nomad-Building-the-Linkedin-for-High-End-Animation-Studios-90bf1cafb0334547b0e6aec11db6e0ce?source=copy_link"
-                    class="work-card">
-
-                    <div class="work-img" style="background-image: url('nomad.jpg');"></div>
-
-                    <div class="work-info">
-
-                        <div class="work-title">Nomad</div>
-
-                        <div class="work-category">Product Design • React</div>
-
-                        <div class="work-desc">Building the Linkedin for High End Animation Studios</div>
-
-                    </div>
-
-                </a>
-
-
-
-                <!-- Hootsuite -->
-
-                <a href="https://www.notion.so/angelwen/Hootsuite-Enterprise-Feature-Design-40e0bfc50ed1497a957db3a607aed49c?source=copy_link"
-                    class="work-card">
-
-                    <div class="work-img" style="background-image: url('hootsuite.jpg');"></div>
-
-                    <div class="work-info">
-
-                        <div class="work-title">Hootsuite Design</div>
-
-                        <div class="work-category">Data Visualization</div>
-
-                        <div class="work-desc">Hootsuite enterprise feature design</div>
-
-                    </div>
-
-                </a>
-
-
+            <div class="featured-grid" style="grid-template-columns: 1fr 1fr 1fr;">
 
                 <!-- Interactive Orchestra -->
 
-                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="work-card">
+                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="featured-card animate-on-scroll stagger-1">
 
-                    <div class="work-img" style="background-image: url('interactiveorchestra.jpg');"></div>
+                    <div class="featured-img" style="background-image: url('interactiveorchestra.jpg');"></div>
 
-                    <div class="work-info">
+                    <div class="featured-info">
 
-                        <div class="work-title">Interactive Orchestra</div>
+                        <h3 class="featured-title">Interactive Orchestra</h3>
 
-                        <div class="work-category">VR • Experience Design</div>
+                        <p class="featured-desc">Designed immersive VR training tool for conductors with real-time feedback systems and intuitive gesture controls.</p>
 
-                        <div class="work-desc">VR project that helps conductors learn how to conduct in a simulated
-                            reality.</div>
+                        <div class="featured-tags">
+                            <span class="tag tag-vr">VR</span>
+                            <span class="tag tag-design">EXPERIENCE DESIGN</span>
+                        </div>
 
                     </div>
 
                 </a>
-
-
 
                 <!-- Third Space -->
 
-                <a href="https://sf-third-space-angelwen4490.replit.app/" class="work-card">
+                <a href="https://sf-third-space-angelwen4490.replit.app/" class="featured-card animate-on-scroll stagger-2" target="_blank">
 
-                    <div class="work-img" style="background-image: url('third space.png');"></div>
+                    <div class="featured-img" style="background-image: url('third space.png');"></div>
 
-                    <div class="work-info">
+                    <div class="featured-info">
 
-                        <div class="work-title">Third Space</div>
+                        <h3 class="featured-title">Third Space</h3>
 
-                        <div class="work-category">Data Visualization</div>
+                        <p class="featured-desc">Interactive map visualizing community gathering spaces in San Francisco with user-friendly filtering and discovery features.</p>
 
-                        <div class="work-desc">Finding third spaces in SF</div>
-
-                    </div>
-
-                </a>
-
-
-
-                <!-- Waack Academy -->
-
-                <a href="https://www.notion.so/angelwen/Gamifying-dance-practice-with-computer-vision-2b4f51a4053080d28755d79577a580ac?source=copy_link"
-                    class="work-card">
-
-                    <div class="work-img" style="background-image: url('waack.jpg');"></div>
-
-                    <div class="work-info">
-
-                        <div class="work-title">Waack Academy</div>
-
-                        <div class="work-category">AI & Motion</div>
-
-                        <div class="work-desc">Using computer vision to teach dance rhythm and arm positioning in
-                            real-time.</div>
+                        <div class="featured-tags">
+                            <span class="tag tag-data">DATA VIZ</span>
+                            <span class="tag tag-design">UX DESIGN</span>
+                        </div>
 
                     </div>
 
                 </a>
 
+                <!-- nwHacks -->
 
+                <a href="https://angelwen.notion.site/Visual-Identity-Design-for-a-Hackathon-edec7c58fcd242ad99c479450269c28f" class="featured-card animate-on-scroll stagger-3" target="_blank">
 
-                <!-- Invisible Violin -->
+                    <div class="featured-img" style="background-image: url('nwhacks.png');"></div>
 
-                <a href="#" class="work-card">
+                    <div class="featured-info">
 
-                    <div class="work-img" style="background-image: url('invisibleviolin.jpg');"></div>
+                        <h3 class="featured-title">nwHacks Brand & Website</h3>
 
-                    <div class="work-info">
+                        <p class="featured-desc">Led complete brand transformation for Western Canada's largest hackathon (600+ attendees, 21 sponsors). Increased registration completion from 23% to 67% and social engagement by 240%.</p>
 
-                        <div class="work-title">Invisible Violin</div>
-
-                        <div class="work-category">Interactive Experience • Music</div>
-
-                        <div class="work-desc">An interactive music experience exploring the intersection of gesture and
-                            sound.</div>
-
-                    </div>
-
-                </a>
-
-
-
-                <!-- Virtual Instruments -->
-
-                <a href="#" class="work-card">
-
-                    <div class="work-img" style="background-color: #4a2a7c;"></div>
-
-                    <div class="work-info">
-
-                        <div class="work-title">Virtual Instruments</div>
-
-                        <div class="work-category">Web Audio • Interactive</div>
-
-                        <div class="work-desc">Experimental virtual instruments playable in the browser.</div>
-
-                    </div>
-
-
-                </a>
-
-
-
-                <!-- That's My Jam -->
-
-                <a href="#" class="work-card">
-
-                    <div class="work-img" style="background-image: url('thatsmyjam.png');"></div>
-
-                    <div class="work-info">
-
-                        <div class="work-title">That's My Jam</div>
-
-                        <div class="work-category">VR • Multimodal AI</div>
-
-                        <div class="work-desc">Turn anything in your environment into a musical instrument using AI and
-                            spatial computing.</div>
+                        <div class="featured-tags">
+                            <span class="tag tag-design">BRAND IDENTITY</span>
+                            <span class="tag tag-design">WEB DESIGN</span>
+                        </div>
 
                     </div>
 
@@ -1303,66 +1301,161 @@
 
         </section>
 
-        <!-- ART GALLERY SECTION -->
-        <section class="works-section">
+        <!-- CREATIVE EXPLORATIONS SECTION -->
 
-            <h2 class="section-title">my art</h2>
+        <section class="featured-section">
 
-            <div class="carousel-container">
+            <h2 class="section-title">Creative Explorations</h2>
+            <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px; font-size: 0.9rem;">Personal projects exploring the intersection of design, technology, and art</p>
+
+            <div class="featured-grid">
+
+                <!-- Invisible Violin -->
+
+                <a href="#" class="featured-card animate-on-scroll stagger-1">
+
+                    <div class="featured-img" style="background-image: url('invisibleviolin.jpg');"></div>
+
+                    <div class="featured-info">
+
+                        <h3 class="featured-title">Invisible Violin</h3>
+
+                        <p class="featured-desc">Personal project: Exploring gesture-based music interfaces using hand tracking and Web Audio API.</p>
+
+                        <div class="featured-tags">
+                            <span class="tag tag-music">MUSIC</span>
+                            <span class="tag tag-ai">INTERACTION</span>
+                        </div>
+
+                    </div>
+
+                </a>
+
+                <!-- That's My Jam -->
+
+                <a href="#" class="featured-card animate-on-scroll stagger-2">
+
+                    <div class="featured-img" style="background-image: url('thatsmyjam.png');"></div>
+
+                    <div class="featured-info">
+
+                        <h3 class="featured-title">That's My Jam</h3>
+
+                        <p class="featured-desc">Personal project: Experimental spatial computing experience turning everyday objects into musical instruments.</p>
+
+                        <div class="featured-tags">
+                            <span class="tag tag-vr">VR</span>
+                            <span class="tag tag-ai">MULTIMODAL AI</span>
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+        <!-- ART GALLERY MODAL -->
+        <div class="art-modal" id="artModal">
+            <div class="art-modal-close" onclick="closeArtModal()">×</div>
+            <div class="art-modal-content">
+                <h2 class="section-title">my art</h2>
+                <div class="art-grid">
 
                 <!-- Artwork 1: Eye with organic forms -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
-                    <div class="work-img" style="background-image: url('art_1.jpg');"></div>
-                    <div class="work-info">
-                        <div class="work-title">Organic Vision</div>
-                        <div class="work-category">Mixed Media</div>
-                        <div class="work-desc">Eye surrounded by flowing organic forms and botanical elements</div>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_1.jpg" alt="Organic Vision" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Organic Vision</div>
+                        <div class="art-medium">Mixed Media</div>
                     </div>
                 </a>
 
                 <!-- Artwork 2: Abstract colorful strokes -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
-                    <div class="work-img" style="background-image: url('art_2.png');"></div>
-                    <div class="work-info">
-                        <div class="work-title">Color Dance</div>
-                        <div class="work-category">Acrylic</div>
-                        <div class="work-desc">Vibrant abstract exploration of movement and color</div>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_2.png" alt="Color Dance" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Color Dance</div>
+                        <div class="art-medium">Acrylic</div>
                     </div>
                 </a>
 
                 <!-- Artwork 3: Blue abstract figures -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
-                    <div class="work-img" style="background-image: url('art_3.jpg');"></div>
-                    <div class="work-info">
-                        <div class="work-title">Blue Reverie</div>
-                        <div class="work-category">Digital Art</div>
-                        <div class="work-desc">Abstract figures emerging from waves of blue</div>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_3.jpg" alt="Blue Reverie" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Blue Reverie</div>
+                        <div class="art-medium">Digital Art</div>
                     </div>
                 </a>
 
                 <!-- Artwork 4: Golden flowing vines -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
-                    <div class="work-img" style="background-image: url('art_4.jpg');"></div>
-                    <div class="work-info">
-                        <div class="work-title">Golden Flow</div>
-                        <div class="work-category">Digital Art</div>
-                        <div class="work-desc">Organic tendrils dancing through warm golden light</div>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_4.jpg" alt="Golden Flow" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Golden Flow</div>
+                        <div class="art-medium">Digital Art</div>
                     </div>
                 </a>
 
                 <!-- Artwork 5: Profile with flowing elements -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="work-card">
-                    <div class="work-img" style="background-image: url('art_5.jpg');"></div>
-                    <div class="work-info">
-                        <div class="work-title">Ethereal Profile</div>
-                        <div class="work-category">Digital Art</div>
-                        <div class="work-desc">A silhouette embraced by flowing natural elements</div>
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_5.jpg" alt="Ethereal Profile" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Ethereal Profile</div>
+                        <div class="art-medium">Digital Art</div>
                     </div>
                 </a>
 
-            </div>
+                <!-- Artwork 6: Colorful swirling canvas -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_6.jpg" alt="Tempest" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Tempest</div>
+                        <div class="art-medium">Oil on Canvas</div>
+                    </div>
+                </a>
 
-        </section>
+                <!-- Artwork 7: Dark spiraling eye -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_7.jpg" alt="Nocturnal Spiral" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Nocturnal Spiral</div>
+                        <div class="art-medium">Digital Art</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 8: Swirling lines with headphones -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_8.jpg" alt="Sound Waves" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Sound Waves</div>
+                        <div class="art-medium">Digital Art</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 9: Purple botanical eye -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_9.jpg" alt="Botanical Gaze" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Botanical Gaze</div>
+                        <div class="art-medium">Digital Art</div>
+                    </div>
+                </a>
+
+                <!-- Artwork 10: Symmetrical mandala -->
+                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
+                    <img src="art_10.jpg" alt="Sacred Symmetry" class="art-img">
+                    <div class="art-overlay">
+                        <div class="art-title">Sacred Symmetry</div>
+                        <div class="art-medium">Digital Art</div>
+                    </div>
+                </a>
+
+                </div>
+            </div>
+        </div>
 
         <!-- BOTTOM NAVIGATION (Moved to Bottom) -->
         <div class="bottom-nav">
@@ -1370,6 +1463,7 @@
             <a href="https://soundcloud.com/l_angemusic" target="_blank" class="nav-link">SoundCloud</a>
             <a href="https://www.youtube.com/channel/UCSsOXbbmOAyd-NwaswGkpnQ" target="_blank"
                 class="nav-link">YouTube</a>
+            <a href="javascript:void(0)" onclick="openArtModal()" class="nav-link">Art Gallery</a>
 
             <div class="social-divider"></div>
 
@@ -1657,6 +1751,39 @@
 
             // Start the loop
             autoScrollCarousel();
+
+            // --- ART MODAL FUNCTIONS ---
+            window.openArtModal = function() {
+                const modal = document.getElementById('artModal');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.classList.add('active');
+                }, 10);
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            };
+
+            window.closeArtModal = function() {
+                const modal = document.getElementById('artModal');
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = ''; // Restore scrolling
+            };
+
+            // Close modal when clicking outside the content
+            document.getElementById('artModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeArtModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeArtModal();
+                }
+            });
         });
     </script>
 
