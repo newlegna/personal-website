@@ -1,1792 +1,437 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>angel wen</title>
-
+    <title>Angel Wen</title>
     <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- Google Fonts -->
+    <!-- Fonts similar to Monument Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- CONFIG --- */
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-hover: rgba(255, 255, 255, 0.15);
-            --text-white: #fff;
-            --text-gray: #ccc;
-            --accent-blue: rgba(100, 200, 255, 0.2);
-
-            /* New accent colors */
-            --accent-music: #ff6b6b;
-            --accent-vr: #a855f7;
-            --accent-data: #14b8a6;
-            --accent-ai: #f59e0b;
-            --accent-design: #3b82f6;
-
-            /* Gradient accents */
-            --gradient-music: linear-gradient(135deg, #ff6b6b, #ffa07a);
-            --gradient-vr: linear-gradient(135deg, #a855f7, #6366f1);
-            --gradient-data: linear-gradient(135deg, #14b8a6, #06b6d4);
-        }
-
-        /* --- LOADING ANIMATION --- */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #1a2332;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.1);
-                opacity: 0.7;
-            }
-        }
-
-        /* --- CUSTOM CURSOR --- */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-        }
-
-        .cursor.hover {
-            width: 50px;
-            height: 50px;
-            border-color: var(--accent-music);
-        }
-
-        @media (max-width: 768px) {
-            .cursor {
-                display: none;
-            }
-        }
-
-        /* --- BODY & BACKGROUND --- */
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: var(--text-white);
-            cursor: none;
-
-            /* Background is handled by canvas + fallback */
-            background: #1a2332;
-
-            user-select: none;
+            box-sizing: border-box;
         }
 
-        /* --- SCROLL ANIMATIONS --- */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --text-primary: rgba(255, 255, 255, 0.85);
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-muted: rgba(255, 255, 255, 0.35);
+            --border: rgba(255, 255, 255, 0.12);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'Space Mono', monospace;
         }
 
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
         }
 
-        .animate-on-scroll.in-view {
-            opacity: 1;
-            transform: translateY(0);
+        body {
+            font-family: var(--font-sans);
+            background: var(--black);
+            color: var(--text-primary);
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .stagger-1 {
-            transition-delay: 0.1s;
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
         }
 
-        .stagger-2 {
-            transition-delay: 0.2s;
-        }
-
-        .stagger-3 {
-            transition-delay: 0.3s;
-        }
-
-        .stagger-4 {
-            transition-delay: 0.4s;
-        }
-
-        .stagger-5 {
-            transition-delay: 0.5s;
-        }
-
-        /* --- MORPHING BLOBS BACKGROUND --- */
-        .blob-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
+        a:hover {
             opacity: 0.6;
-            animation: morphBlob 15s ease-in-out infinite;
         }
 
-        .blob-1 {
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(135deg, #ff6b6b, #a855f7);
-            top: -100px;
-            left: -100px;
-            animation-delay: 0s;
-        }
-
-        .blob-2 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, #14b8a6, #3b82f6);
-            top: 50%;
-            right: -100px;
-            animation-delay: -5s;
-        }
-
-        .blob-3 {
-            width: 350px;
-            height: 350px;
-            background: linear-gradient(135deg, #f59e0b, #ff6b6b);
-            bottom: -50px;
-            left: 30%;
-            animation-delay: -10s;
-        }
-
-        @keyframes morphBlob {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1) rotate(0deg);
-                border-radius: 50% 40% 60% 50%;
-            }
-
-            25% {
-                transform: translate(50px, -30px) scale(1.1) rotate(90deg);
-                border-radius: 60% 50% 40% 60%;
-            }
-
-            50% {
-                transform: translate(-30px, 50px) scale(0.9) rotate(180deg);
-                border-radius: 40% 60% 50% 40%;
-            }
-
-            75% {
-                transform: translate(30px, 30px) scale(1.05) rotate(270deg);
-                border-radius: 50% 40% 60% 50%;
-            }
-        }
-
-        /* --- MARQUEE TEXT --- */
-        .marquee-container {
-            width: 100%;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.05);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px 0;
-        }
-
-        .marquee-track {
-            display: flex;
-            width: fit-content;
-            animation: marqueeScroll 25s linear infinite;
-        }
-
-        .marquee-track:hover {
-            animation-play-state: paused;
-        }
-
-        .marquee-content {
-            display: flex;
-            gap: 60px;
-            padding-right: 60px;
-            flex-shrink: 0;
-        }
-
-        .marquee-item {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            white-space: nowrap;
-            color: rgba(255, 255, 255, 0.7);
-            transition: color 0.3s ease;
-        }
-
-        .marquee-item:hover {
-            color: var(--accent-music);
-        }
-
-        .marquee-separator {
-            color: var(--accent-vr);
-            font-weight: 300;
-        }
-
-        @keyframes marqueeScroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        /* --- INTERACTIVE PIXEL CANVAS --- */
-        #pixel-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            /* Behind everything */
-            pointer-events: none;
-        }
-
-        /* --- CONTAINER --- */
-        .container {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        /* --- BENTO GRID SYSTEM --- */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            /* 66% - 33% */
-            gap: 20px;
-            width: 100%;
-            max-width: 1100px;
-            justify-content: center;
-        }
-
-        .bento-box {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 30px;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            color: white;
-            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .bento-box:hover {
-            background: var(--glass-hover);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* Typography */
-        h1 {
-            font-size: 2rem;
-            margin: 0 0 10px 0;
-            letter-spacing: -1px;
-        }
-
-        h3 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-gray);
-            margin-bottom: 15px;
-        }
-
-        p {
-            line-height: 1.5;
-            color: #e0e0e0;
-            font-size: 1rem;
-        }
-
-        /* Specific Box Styles */
-        .bio-box {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .bio-img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            flex-shrink: 0;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .bio-content {
-            flex-grow: 1;
-        }
-
-        .cta-group {
-            margin-top: 15px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .cta-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .cta-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .tech-tag {
-            font-size: 0.75rem;
-            padding: 8px 14px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            cursor: default;
-        }
-
-        .tech-tag:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-        }
-
-        /* --- WORKS SECTION --- */
-        .works-section {
-            padding: 80px 20px;
-            min-height: 60vh;
-            /* CHANGED: Transparent background to show pixels */
-            background: transparent;
-            /* REMOVED: Blur filter so pixels are sharp */
-            backdrop-filter: none;
-            /* ADDED: Stronger top divider */
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 40px;
-            text-align: center;
-            text-transform: lowercase;
-            letter-spacing: -1px;
-        }
-
-        /* Carousel */
-        .carousel-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 24px;
-            padding: 20px 40px 40px 40px;
-            scroll-behavior: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .carousel-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .work-card {
-            min-width: 100px;
-            height: 420px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            flex-shrink: 0;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .work-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .work-img {
-            height: 55%;
-            width: 100%;
-            background-size: cover;
-            background-position: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background-color: #2a4a7c;
-        }
-
-        .work-info {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: 45%;
-        }
-
-        .work-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin: 0;
-            line-height: 1.3;
-        }
-
-        .work-category {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin: 0;
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            display: inline-block;
-            width: fit-content;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .work-card:hover .work-category {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .work-desc {
-            font-size: 0.85rem;
-            color: #e8e8e8;
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        /* --- 3D TILT EFFECT --- */
-        .work-card {
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .work-card .work-img,
-        .work-card .work-info {
-            transform: translateZ(20px);
-        }
-
-        /* --- FEATURED PROJECTS SECTION --- */
-        .featured-section {
-            padding: 60px 20px 40px;
-            max-width: 1100px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .featured-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .featured-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            overflow: hidden;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            transition: all 0.4s ease;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .featured-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .featured-img {
-            height: 220px;
-            background-size: cover;
-            background-position: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .featured-info {
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .featured-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .featured-desc {
-            font-size: 0.95rem;
-            color: #e0e0e0;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .featured-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 8px;
-        }
-
-        .tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.7rem;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .tag-music {
-            background: rgba(255, 107, 107, 0.2);
-            color: var(--accent-music);
-            border: 1px solid rgba(255, 107, 107, 0.3);
-        }
-
-        .tag-vr {
-            background: rgba(168, 85, 247, 0.2);
-            color: var(--accent-vr);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }
-
-        .tag-data {
-            background: rgba(20, 184, 166, 0.2);
-            color: var(--accent-data);
-            border: 1px solid rgba(20, 184, 166, 0.3);
-        }
-
-        .tag-ai {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--accent-ai);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .tag-design {
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--accent-design);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-        }
-
-        /* --- ART GALLERY MODAL --- */
-        .art-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .art-modal.active {
+        img {
+            max-width: 100%;
+            height: auto;
             display: block;
-            opacity: 1;
         }
 
-        .art-modal-content {
-            padding: 80px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        .art-modal-close {
+        /* --- HEADER --- */
+        .header {
             position: fixed;
-            top: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            transition: all 0.3s ease;
-            z-index: 10001;
-            backdrop-filter: blur(10px);
-        }
-
-        .art-modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(90deg);
-        }
-
-        .art-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            padding: 0 20px;
-        }
-
-        .art-card {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            aspect-ratio: 1 / 1;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.4s ease;
-            cursor: pointer;
-        }
-
-        .art-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .art-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .art-card:hover .art-img {
-            transform: scale(1.08);
-        }
-
-        .art-overlay {
-            position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
             right: 0;
-            padding: 20px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .art-card:hover .art-overlay {
-            opacity: 1;
-        }
-
-        .art-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: white;
-            margin: 0 0 5px 0;
-        }
-
-        .art-medium {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .art-section-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .art-section-subtitle {
-            font-size: 1rem;
-            color: var(--text-gray);
-            margin-top: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .art-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-                padding: 0 10px;
-            }
-
-            .art-modal-close {
-                top: 20px;
-                right: 20px;
-                width: 40px;
-                height: 40px;
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .featured-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* --- CRAFT SECTION --- */
-        .craft-section {
-            padding: 60px 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .craft-title {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-gray);
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .craft-grid {
+            z-index: 100;
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: var(--black);
         }
 
-        .craft-item {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            padding: 12px 20px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            transition: all 0.3s ease;
-        }
-
-        .craft-item:hover {
-            background: var(--glass-hover);
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* --- BIO GRADIENT ANIMATION --- */
-        .bio-box {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bio-box::before {
+        .header::after {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--accent-music), var(--accent-vr), var(--accent-data), var(--accent-ai));
-            background-size: 400% 400%;
-            border-radius: 26px;
-            z-index: -1;
-            animation: gradientShift 8s ease infinite;
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            bottom: 0;
+            left: 2rem;
+            right: 2rem;
+            height: 1px;
+            background: var(--border);
         }
 
-        .bio-box:hover::before {
-            opacity: 1;
-        }
-
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* --- TYPOGRAPHY REFINEMENTS --- */
-        .tech-tag {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .work-category {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* --- BOTTOM NAV (FOOTER) --- */
-        /* --- SCROLL INDICATOR --- */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            z-index: 10;
-            animation: bounce 2s infinite;
-        }
-
-        .scroll-indicator-text {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 500;
-        }
-
-        .scroll-indicator-arrow {
-            width: 24px;
-            height: 24px;
-            border-left: 2px solid rgba(255, 255, 255, 0.7);
-            border-bottom: 2px solid rgba(255, 255, 255, 0.7);
-            transform: rotate(-45deg);
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .scroll-indicator {
-                bottom: 20px;
-            }
-        }
-
-        .bottom-nav {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            padding: 60px 20px;
-            position: relative;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
+        .logo {
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
         }
 
         .nav-link {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.95rem;
-            padding-bottom: 2px;
-            border-bottom: 1px solid transparent;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
         }
 
         .nav-link:hover {
-            color: white;
-            border-bottom-color: white;
+            color: var(--white);
+            opacity: 1;
         }
 
-        .social-divider {
-            width: 1px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.3);
-            margin: 0 10px;
+        /* --- MAIN --- */
+        .main {
+            padding: 8rem 2rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .social-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: rgba(255, 255, 255, 0.8);
-            transition: transform 0.2s;
+        /* --- SECTION TITLE --- */
+        .section-title {
+            font-size: 4rem;
+            font-weight: 400;
+            font-style: italic;
+            font-family: 'Playfair Display', Georgia, serif;
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 4rem;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
         }
 
-        .social-icon:hover svg {
-            transform: scale(1.2);
-            fill: white;
+        /* --- PROJECT ROW --- */
+        .project-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        /* --- MOBILE --- */
-        @media (max-width: 768px) {
-            .hero {
-                height: auto;
-                min-height: 80vh;
-                padding-top: 40px;
-                padding-bottom: 40px;
+        .project-row:first-of-type {
+            padding-top: 0;
+        }
+
+        .project-row:last-of-type {
+            border-bottom: none;
+        }
+
+        /* --- PROJECT ITEM --- */
+        .project-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-image {
+            overflow: hidden;
+            background: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-item:hover .project-image img {
+            transform: scale(1.03);
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .project-caption {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .project-meta {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.75rem;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            background: var(--black);
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2rem;
+            right: 2rem;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .footer-email {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-email:hover {
+            color: var(--white);
+            opacity: 1;
+        }
+
+        /* --- INFO OVERLAY --- */
+        .info-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 200;
+            background: var(--black);
+            padding: 8rem 2rem 4rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .info-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .info-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .info-content h2 {
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .info-content p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-close {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-sans);
+        }
+
+        .info-close:hover {
+            color: var(--white);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .project-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header, .footer {
+                padding: 1rem 1.5rem;
             }
 
-            .bento-grid {
+            .header::after, .footer::before {
+                left: 1.5rem;
+                right: 1.5rem;
+            }
+
+            .main {
+                padding: 6rem 1.5rem 5rem;
+            }
+
+            .project-row {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 2rem;
             }
 
-            .bio-box {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .cta-group {
-                justify-content: center;
-            }
-
-            .social-divider {
-                display: none;
-            }
-
-            .nav-link {
-                font-size: 1.1rem;
-            }
-
-            .bottom-nav {
-                flex-direction: column;
-                gap: 20px;
+            .project-title {
+                font-size: 1.125rem;
             }
         }
     </style>
-
-    <script>
-        function copyEmail() {
-            navigator.clipboard.writeText("angel.wen@example.com"); // Replace with actual email
-            const btn = document.getElementById('email-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "Copied!";
-            setTimeout(() => { btn.innerText = originalText; }, 2000);
-        }
-    </script>
 </head>
-
 <body>
 
-    <!-- Loading Animation -->
-    <div class="loader">
-        <img src="logo.png" alt="Loading..." class="loader-logo">
-    </div>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">Angel Wen</a>
+        <a href="#" class="nav-link" onclick="toggleInfo(event)">Info</a>
+    </header>
 
-    <!-- Custom Cursor -->
-    <div class="cursor"></div>
+    <!-- Main Content -->
+    <main class="main">
+        <h2 class="section-title">Selected<br>Works</h2>
 
-    <!-- Morphing Blobs Background -->
-    <div class="blob-container">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-
-    <!-- Interactive Pixel Canvas covering full page -->
-    <canvas id="pixel-canvas"></canvas>
-
-    <div class="container">
-
-        <!-- HERO SECTION -->
-        <section class="hero">
-
-            <div class="bento-grid">
-                <!-- Box 1: Bio (Large) -->
-                <div class="bento-box bio-box">
-                    <img src="logo.png" alt="Angel Wen" class="bio-img">
-                    <div class="bio-content">
-                        <h1>Angel Wen</h1>
-                        <p>Product Designer specializing in user-centered design and AI products.<br>I solve complex problems through research, iteration, and collaboration.</p>
-                        <div class="cta-group">
-                            <button id="email-btn" class="cta-btn" onclick="copyEmail()">Copy Email</button>
-                            <span class="cta-btn" style="background: rgba(100, 200, 255, 0.2); border-color: rgba(100, 200, 255, 0.3); cursor: default;">✨ Open to Opportunities</span>
-                        </div>
-                    </div>
+        <!-- Project 1 -->
+        <div class="project-row">
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="https://media.giphy.com/media/diQKfFuvAegncZdiox/giphy.gif" alt="Lobby Arcade">
                 </div>
-
-                <!-- Box 2: Philosophy (Medium) -->
-                <div class="bento-box">
-                    <h3>Design Philosophy</h3>
-                    <p style="font-style: italic; opacity: 0.9;">"Great product design starts with deep user empathy and ends with measurable impact."</p>
-                    <p style="margin-top: 10px; font-size: 0.9rem;">Every pixel should serve a purpose, every interaction should feel intuitive.
-                    </p>
-                </div>
+                <h3 class="project-title">Lobby Arcade</h3>
+                <span class="project-meta">Interaction Design · 2025</span>
             </div>
 
-            <!-- Scroll Indicator -->
-            <div class="scroll-indicator" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
-                <span class="scroll-indicator-text">Scroll to see work</span>
-                <div class="scroll-indicator-arrow"></div>
-            </div>
-        </section>
-
-        <!-- MARQUEE TEXT -->
-        <div class="marquee-container">
-            <div class="marquee-track">
-                <div class="marquee-content">
-                    <span class="marquee-item">Product Designer</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">User Research</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Prototyping</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Design Systems</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Data Visualization</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Interaction Design</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Visual Design</span>
-                    <span class="marquee-separator">✦</span>
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="https://media.giphy.com/media/6cVw6i1fHMAtk6M8Qf/giphy.gif" alt="Lobby Arcade detail">
                 </div>
-                <div class="marquee-content">
-                    <span class="marquee-item">Product Designer</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">User Research</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Prototyping</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Design Systems</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Data Visualization</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Interaction Design</span>
-                    <span class="marquee-separator">✦</span>
-                    <span class="marquee-item">Visual Design</span>
-                    <span class="marquee-separator">✦</span>
+                <p class="project-caption">A playful interactive arcade lobby designed to engage users through gamified UI elements.</p>
+            </div>
+
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="https://media.giphy.com/media/rXfTv6Tm3owBsoqZD0/giphy.gif" alt="Lobby Arcade detail">
                 </div>
             </div>
         </div>
 
-        <!-- CRAFT & TOOLS SECTION -->
-        <section class="craft-section animate-on-scroll">
-            <h3 class="craft-title">Design Tools & Skills</h3>
-            <div class="craft-grid">
-                <span class="craft-item">Figma</span>
-                <span class="craft-item">Adobe XD</span>
-                <span class="craft-item">Sketch</span>
-                <span class="craft-item">Prototyping</span>
-                <span class="craft-item">User Research</span>
-                <span class="craft-item">Wireframing</span>
-                <span class="craft-item">React</span>
-                <span class="craft-item">Design Systems</span>
-                <span class="craft-item">Miro</span>
-                <span class="craft-item">Three.js</span>
-            </div>
-        </section>
-
-        <!-- FEATURED PROJECTS SECTION -->
-        <section class="featured-section">
-            <h2 class="section-title animate-on-scroll">Featured Product Design Work</h2>
-            <div class="featured-grid">
-                <!-- Featured: Nomad -->
-                <a href="https://www.notion.so/angelwen/Nomad-Building-the-Linkedin-for-High-End-Animation-Studios-90bf1cafb0334547b0e6aec11db6e0ce?source=copy_link"
-                    class="featured-card animate-on-scroll stagger-1" target="_blank">
-                    <div class="featured-img" style="background-image: url('nomad.jpg');"></div>
-                    <div class="featured-info">
-                        <h3 class="featured-title">Nomad</h3>
-                        <p class="featured-desc"><strong>Problem:</strong> High-end animation studios struggled to find and vet specialized talent across a fragmented industry.<br><br>
-                        <strong>Solution:</strong> Designed a professional networking platform with intuitive profile creation, portfolio showcasing, and studio-to-artist matching flows. Created a design system emphasizing visual storytelling for creative professionals.</p>
-                        <div class="featured-tags">
-                            <span class="tag tag-design">PRODUCT DESIGN</span>
-                            <span class="tag tag-data">UX RESEARCH</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Featured: Hootsuite -->
-                <a href="https://www.notion.so/angelwen/Hootsuite-Enterprise-Feature-Design-40e0bfc50ed1497a957db3a607aed49c?source=copy_link"
-                    class="featured-card animate-on-scroll stagger-2" target="_blank">
-                    <div class="featured-img" style="background-image: url('hootsuite.jpg');"></div>
-                    <div class="featured-info">
-                        <h3 class="featured-title">Hootsuite Enterprise</h3>
-                        <p class="featured-desc"><strong>Problem:</strong> Enterprise teams needed clearer insights into social media performance across multiple channels.<br><br>
-                        <strong>Solution:</strong> Designed data visualization dashboards that transformed complex analytics into actionable insights. Created customizable reporting interfaces for different stakeholder needs.</p>
-                        <div class="featured-tags">
-                            <span class="tag tag-data">DATA VIZ</span>
-                            <span class="tag tag-design">ENTERPRISE UX</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </section>
-
-        <!-- ADDITIONAL WORK SECTION -->
-
-        <section class="featured-section">
-
-            <h2 class="section-title">Additional Work</h2>
-
-            <div class="featured-grid" style="grid-template-columns: 1fr 1fr 1fr;">
-
-                <!-- Interactive Orchestra -->
-
-                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="featured-card animate-on-scroll stagger-1">
-
-                    <div class="featured-img" style="background-image: url('interactiveorchestra.jpg');"></div>
-
-                    <div class="featured-info">
-
-                        <h3 class="featured-title">Interactive Orchestra</h3>
-
-                        <p class="featured-desc">Designed immersive VR training tool for conductors with real-time feedback systems and intuitive gesture controls.</p>
-
-                        <div class="featured-tags">
-                            <span class="tag tag-vr">VR</span>
-                            <span class="tag tag-design">EXPERIENCE DESIGN</span>
-                        </div>
-
-                    </div>
-
-                </a>
-
-                <!-- Third Space -->
-
-                <a href="https://sf-third-space-angelwen4490.replit.app/" class="featured-card animate-on-scroll stagger-2" target="_blank">
-
-                    <div class="featured-img" style="background-image: url('third space.png');"></div>
-
-                    <div class="featured-info">
-
-                        <h3 class="featured-title">Third Space</h3>
-
-                        <p class="featured-desc">Interactive map visualizing community gathering spaces in San Francisco with user-friendly filtering and discovery features.</p>
-
-                        <div class="featured-tags">
-                            <span class="tag tag-data">DATA VIZ</span>
-                            <span class="tag tag-design">UX DESIGN</span>
-                        </div>
-
-                    </div>
-
-                </a>
-
-                <!-- nwHacks -->
-
-                <a href="https://angelwen.notion.site/Visual-Identity-Design-for-a-Hackathon-edec7c58fcd242ad99c479450269c28f" class="featured-card animate-on-scroll stagger-3" target="_blank">
-
-                    <div class="featured-img" style="background-image: url('nwhacks.png');"></div>
-
-                    <div class="featured-info">
-
-                        <h3 class="featured-title">nwHacks Brand & Website</h3>
-
-                        <p class="featured-desc">Led complete brand transformation for Western Canada's largest hackathon (600+ attendees, 21 sponsors). Increased registration completion from 23% to 67% and social engagement by 240%.</p>
-
-                        <div class="featured-tags">
-                            <span class="tag tag-design">BRAND IDENTITY</span>
-                            <span class="tag tag-design">WEB DESIGN</span>
-                        </div>
-
-                    </div>
-
-                </a>
-
+        <!-- Project 2 -->
+        <div class="project-row">
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="nest-wallet.png" alt="Nest Wallet">
+                </div>
+                <h3 class="project-title">Nest Wallet</h3>
+                <span class="project-meta">Product Design · 2025</span>
             </div>
 
-        </section>
-
-        <!-- CREATIVE EXPLORATIONS SECTION -->
-
-        <section class="featured-section">
-
-            <h2 class="section-title">Creative Explorations</h2>
-            <p style="text-align: center; color: var(--text-gray); margin-bottom: 30px; font-size: 0.9rem;">Personal projects exploring the intersection of design, technology, and art</p>
-
-            <div class="featured-grid">
-
-                <!-- Invisible Violin -->
-
-                <a href="#" class="featured-card animate-on-scroll stagger-1">
-
-                    <div class="featured-img" style="background-image: url('invisibleviolin.jpg');"></div>
-
-                    <div class="featured-info">
-
-                        <h3 class="featured-title">Invisible Violin</h3>
-
-                        <p class="featured-desc">Personal project: Exploring gesture-based music interfaces using hand tracking and Web Audio API.</p>
-
-                        <div class="featured-tags">
-                            <span class="tag tag-music">MUSIC</span>
-                            <span class="tag tag-ai">INTERACTION</span>
-                        </div>
-
-                    </div>
-
-                </a>
-
-                <!-- That's My Jam -->
-
-                <a href="#" class="featured-card animate-on-scroll stagger-2">
-
-                    <div class="featured-img" style="background-image: url('thatsmyjam.png');"></div>
-
-                    <div class="featured-info">
-
-                        <h3 class="featured-title">That's My Jam</h3>
-
-                        <p class="featured-desc">Personal project: Experimental spatial computing experience turning everyday objects into musical instruments.</p>
-
-                        <div class="featured-tags">
-                            <span class="tag tag-vr">VR</span>
-                            <span class="tag tag-ai">MULTIMODAL AI</span>
-                        </div>
-
-                    </div>
-
-                </a>
-
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="nest-wallet-2.png" alt="Nest Wallet detail">
+                </div>
+                <p class="project-caption">Creating an engaging trading experience in a wallet.</p>
             </div>
 
-        </section>
-
-        <!-- ART GALLERY MODAL -->
-        <div class="art-modal" id="artModal">
-            <div class="art-modal-close" onclick="closeArtModal()">×</div>
-            <div class="art-modal-content">
-                <h2 class="section-title">my art</h2>
-                <div class="art-grid">
-
-                <!-- Artwork 1: Eye with organic forms -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_1.jpg" alt="Organic Vision" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Organic Vision</div>
-                        <div class="art-medium">Mixed Media</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 2: Abstract colorful strokes -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_2.png" alt="Color Dance" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Color Dance</div>
-                        <div class="art-medium">Acrylic</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 3: Blue abstract figures -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_3.jpg" alt="Blue Reverie" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Blue Reverie</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 4: Golden flowing vines -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_4.jpg" alt="Golden Flow" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Golden Flow</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 5: Profile with flowing elements -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_5.jpg" alt="Ethereal Profile" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Ethereal Profile</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 6: Colorful swirling canvas -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_6.jpg" alt="Tempest" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Tempest</div>
-                        <div class="art-medium">Oil on Canvas</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 7: Dark spiraling eye -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_7.jpg" alt="Nocturnal Spiral" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Nocturnal Spiral</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 8: Swirling lines with headphones -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_8.jpg" alt="Sound Waves" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Sound Waves</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 9: Purple botanical eye -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_9.jpg" alt="Botanical Gaze" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Botanical Gaze</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
-                <!-- Artwork 10: Symmetrical mandala -->
-                <a href="https://instagram.com/creatively.angel" target="_blank" class="art-card">
-                    <img src="art_10.jpg" alt="Sacred Symmetry" class="art-img">
-                    <div class="art-overlay">
-                        <div class="art-title">Sacred Symmetry</div>
-                        <div class="art-medium">Digital Art</div>
-                    </div>
-                </a>
-
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="nest-wallet.png" alt="Nest Wallet detail">
                 </div>
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION (Moved to Bottom) -->
-        <div class="bottom-nav">
-            <a href="https://substack.com/@angelwen?" target="_blank" class="nav-link">Writing</a>
-            <a href="https://soundcloud.com/l_angemusic" target="_blank" class="nav-link">SoundCloud</a>
-            <a href="https://www.youtube.com/channel/UCSsOXbbmOAyd-NwaswGkpnQ" target="_blank"
-                class="nav-link">YouTube</a>
-            <a href="javascript:void(0)" onclick="openArtModal()" class="nav-link">Art Gallery</a>
+        <!-- Project 3 -->
+        <div class="project-row">
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="breezy.png" alt="AI Website Editor on Mobile">
+                </div>
+                <h3 class="project-title">AI Website Editor on Mobile</h3>
+                <span class="project-meta">Product Design · 2026</span>
+            </div>
 
-            <div class="social-divider"></div>
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="breezy-2.png" alt="AI Website Editor detail">
+                </div>
+                <p class="project-caption">Building websites from your phone with AI-powered assistance.</p>
+            </div>
 
-            <a href="https://x.com/AngelwenW" target="_blank" class="social-icon" title="Twitter / X">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-            </a>
-            <a href="https://www.linkedin.com/in/angel-wen/" target="_blank" class="social-icon" title="LinkedIn">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg>
-            </a>
-            <a href="https://instagram.com/creatively.angel" target="_blank" class="social-icon" title="Instagram">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.069-4.85.069-3.204 0-3.584-.011-4.849-.069-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                </svg>
-            </a>
+            <div class="project-item">
+                <div class="project-image">
+                    <img src="breezy.png" alt="AI Website Editor detail">
+                </div>
+            </div>
         </div>
 
+    </main>
+
+    <!-- Info Overlay -->
+    <div class="info-overlay" id="infoOverlay">
+        <button class="info-close" onclick="toggleInfo(event)">Close</button>
+        <div class="info-content">
+            <h2>About</h2>
+            <p>Angel Wen is a Product Designer based in San Francisco, specializing in user-centered design and AI products.</p>
+            <p>With experience at companies like Nest Wallet, Hootsuite, and various startups, she focuses on solving complex problems through research, iteration, and collaboration.</p>
+            <p>Previously worked on design systems, data visualization, and enterprise product experiences.</p>
+
+            <h2 style="margin-top: 3rem;">Contact</h2>
+            <p><a href="mailto:angelwen4490@gmail.com">angelwen4490@gmail.com</a></p>
+            <p>
+                <a href="https://linkedin.com/in/angel-wen" target="_blank">LinkedIn</a> ·
+                <a href="https://twitter.com/AngelwenW" target="_blank">Twitter</a> ·
+                <a href="https://instagram.com/creatively.angel" target="_blank">Instagram</a>
+            </p>
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <a href="mailto:angelwen4490@gmail.com" class="footer-email">angelwen4490@gmail.com</a>
+    </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        function toggleInfo(e) {
+            e.preventDefault();
+            const overlay = document.getElementById('infoOverlay');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
+        }
 
-            // --- LOADING ANIMATION ---
-            const loader = document.querySelector('.loader');
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    loader.classList.add('hidden');
-                }, 500);
-            });
-            // Fallback: hide loader after 2 seconds even if load event doesn't fire
-            setTimeout(() => {
-                loader.classList.add('hidden');
-            }, 2000);
-
-            // --- CUSTOM CURSOR ---
-            const cursor = document.querySelector('.cursor');
-            let mouseX = 0, mouseY = 0;
-            let cursorX = 0, cursorY = 0;
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-            });
-
-            function animateCursor() {
-                cursorX += (mouseX - cursorX) * 0.15;
-                cursorY += (mouseY - cursorY) * 0.15;
-                cursor.style.left = cursorX + 'px';
-                cursor.style.top = cursorY + 'px';
-                requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
-
-            // Cursor hover effect on interactive elements
-            const interactiveElements = document.querySelectorAll('a, button, .work-card, .featured-card, .bento-box, .craft-item, .art-card');
-            interactiveElements.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-            });
-
-            // --- SCROLL ANIMATIONS (Intersection Observer) ---
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                    }
-                });
-            }, observerOptions);
-
-            animatedElements.forEach(el => observer.observe(el));
-
-            // --- 3D TILT EFFECT ON CARDS ---
-            const tiltCards = document.querySelectorAll('.work-card, .featured-card');
-
-            tiltCards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = (y - centerY) / 15;
-                    const rotateY = (centerX - x) / 15;
-
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-                });
-
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-                });
-            });
-
-            // --- PIXEL CANVAS SCRIPT ---
-            const canvas = document.getElementById('pixel-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            let particlesArray;
-
-            // Mouse position
-            let mouse = {
-                x: null,
-                y: null,
-                radius: 100 // Area of influence
-            }
-
-            window.addEventListener('mousemove', function (event) {
-                mouse.x = event.x;
-                mouse.y = event.y;
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function () {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                initParticles();
-            });
-
-            class Particle {
-                constructor(x, y) {
-                    this.x = x;
-                    this.y = y;
-                    this.size = 2; // Size of pixel
-                    this.baseX = this.x;
-                    this.baseY = this.y;
-                    this.density = (Math.random() * 20) + 1; // How heavy/slow they move
-                }
-                draw() {
-                    // Subtle white pixel
-                    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                    ctx.beginPath();
-                    // Draw square for "pixel" look
-                    ctx.rect(this.x, this.y, this.size, this.size);
-                    ctx.closePath();
-                    ctx.fill();
-                }
-                update() {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let forceDirectionX = dx / distance;
-                    let forceDirectionY = dy / distance;
-                    let maxDistance = mouse.radius;
-                    let force = (maxDistance - distance) / maxDistance;
-                    let directionX = forceDirectionX * force * this.density;
-                    let directionY = forceDirectionY * force * this.density;
-
-                    // Move away from mouse
-                    if (distance < mouse.radius) {
-                        this.x -= directionX;
-                        this.y -= directionY;
-                    } else {
-                        // Return to original position
-                        if (this.x !== this.baseX) {
-                            let dx = this.x - this.baseX;
-                            this.x -= dx / 10;
-                        }
-                        if (this.y !== this.baseY) {
-                            let dy = this.y - this.baseY;
-                            this.y -= dy / 10;
-                        }
-                    }
+        // Close with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const overlay = document.getElementById('infoOverlay');
+                if (overlay.classList.contains('active')) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
                 }
             }
-
-            // Landmark shape definitions (normalized 0-1 coordinates)
-            function getLandmarkShapes() {
-                return {
-                    // Vancouver Mountains (left side)
-                    mountains: [
-                        [0.05, 0.6], [0.08, 0.55], [0.11, 0.5], [0.14, 0.48], [0.17, 0.45],
-                        [0.2, 0.5], [0.23, 0.53], [0.26, 0.5], [0.29, 0.47], [0.32, 0.45],
-                        [0.35, 0.48], [0.38, 0.52], [0.41, 0.55], [0.44, 0.58], [0.47, 0.6]
-                    ],
-                    // Vancouver building (CN Tower-ish)
-                    tower: [
-                        [0.15, 0.65], [0.15, 0.6], [0.15, 0.55], [0.15, 0.5], [0.15, 0.45],
-                        [0.15, 0.4], [0.14, 0.4], [0.16, 0.4], [0.14, 0.42], [0.16, 0.42]
-                    ],
-                    // Asian Pagoda (right side)
-                    pagoda: [
-                        // Base
-                        [0.75, 0.65], [0.78, 0.65], [0.81, 0.65],
-                        // Level 1
-                        [0.74, 0.62], [0.75, 0.62], [0.76, 0.62], [0.77, 0.62], [0.78, 0.62],
-                        [0.79, 0.62], [0.80, 0.62], [0.81, 0.62], [0.82, 0.62],
-                        // Level 2
-                        [0.76, 0.58], [0.77, 0.58], [0.78, 0.58], [0.79, 0.58], [0.80, 0.58],
-                        // Level 3
-                        [0.77, 0.54], [0.78, 0.54], [0.79, 0.54],
-                        // Spire
-                        [0.78, 0.52], [0.78, 0.5], [0.78, 0.48]
-                    ],
-                    // Temple roof (center-right)
-                    temple: [
-                        [0.55, 0.55], [0.58, 0.52], [0.61, 0.5], [0.64, 0.48], [0.67, 0.5],
-                        [0.70, 0.52], [0.73, 0.55], [0.60, 0.58], [0.62, 0.58], [0.64, 0.58],
-                        [0.66, 0.58], [0.68, 0.58]
-                    ]
-                };
-            }
-
-            function initParticles() {
-                particlesArray = [];
-
-                // Add landmark particles
-                const landmarks = getLandmarkShapes();
-                for (let landmarkName in landmarks) {
-                    const shape = landmarks[landmarkName];
-                    shape.forEach(([normalizedX, normalizedY]) => {
-                        const x = normalizedX * canvas.width;
-                        const y = normalizedY * canvas.height;
-                        particlesArray.push(new Particle(x, y));
-                    });
-                }
-
-                // Add sparse background grid
-                for (let y = 0; y < canvas.height; y += 50) {
-                    for (let x = 0; x < canvas.width; x += 50) {
-                        // Skip if too close to landmarks to avoid clutter
-                        particlesArray.push(new Particle(x, y));
-                    }
-                }
-            }
-
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < particlesArray.length; i++) {
-                    particlesArray[i].draw();
-                    particlesArray[i].update();
-                }
-                requestAnimationFrame(animateParticles);
-            }
-
-            initParticles();
-            animateParticles();
-
-
-            // --- CAROUSEL AUTO-SCROLL ---
-            const carousel = document.querySelector('.carousel-container');
-
-            // Clone items for infinite loop illusion
-            const originalCards = Array.from(carousel.children);
-            originalCards.forEach(card => {
-                const clone = card.cloneNode(true);
-                carousel.appendChild(clone);
-            });
-
-            let scrollSpeed = 1; // Pixels per frame
-            let isHovering = false;
-
-            function autoScrollCarousel() {
-                if (!isHovering) {
-                    carousel.scrollLeft += scrollSpeed;
-
-                    // If we've scrolled past the first set of items (halfway point)
-                    // Snap back to 0. Since the second set is identical to the first, 
-                    // this snap is invisible to the user.
-                    if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
-                        carousel.scrollLeft = 0;
-                    }
-                }
-                requestAnimationFrame(autoScrollCarousel);
-            }
-
-            // Pause on interaction
-            carousel.addEventListener('mouseenter', () => isHovering = true);
-            carousel.addEventListener('mouseleave', () => isHovering = false);
-            carousel.addEventListener('touchstart', () => isHovering = true);
-            carousel.addEventListener('touchend', () => isHovering = false);
-
-            // Start the loop
-            autoScrollCarousel();
-
-            // --- ART MODAL FUNCTIONS ---
-            window.openArtModal = function() {
-                const modal = document.getElementById('artModal');
-                modal.style.display = 'block';
-                setTimeout(() => {
-                    modal.classList.add('active');
-                }, 10);
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            };
-
-            window.closeArtModal = function() {
-                const modal = document.getElementById('artModal');
-                modal.classList.remove('active');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 300);
-                document.body.style.overflow = ''; // Restore scrolling
-            };
-
-            // Close modal when clicking outside the content
-            document.getElementById('artModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeArtModal();
-                }
-            });
-
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeArtModal();
-                }
-            });
         });
     </script>
 
 </body>
-
 </html>
