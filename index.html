@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,9 @@
     <!-- Fonts similar to Monument Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
+        rel="stylesheet">
 
     <style>
         * {
@@ -296,11 +299,14 @@
         }
 
         @media (max-width: 600px) {
-            .header, .footer {
+
+            .header,
+            .footer {
                 padding: 1rem 1.5rem;
             }
 
-            .header::after, .footer::before {
+            .header::after,
+            .footer::before {
                 left: 1.5rem;
                 right: 1.5rem;
             }
@@ -320,6 +326,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Header -->
@@ -336,7 +343,10 @@
         <div class="project-row">
             <div class="project-item">
                 <div class="project-image">
-                    <img src="https://media.giphy.com/media/UnQUWUi6quutTT4do4/giphy.gif" alt="Lobby Arcade">
+                    <video width="100%" height="auto" autoplay loop muted playsinline>
+                        <source src="video 1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
                 <h3 class="project-title">Lobby Arcade</h3>
                 <span class="project-meta">Interaction Design · 2025</span>
@@ -344,14 +354,21 @@
 
             <div class="project-item">
                 <div class="project-image">
-                    <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnFvaXZ4YXJ2YTdvMzE3Njd4bHFhZnZsaDhzMmtjdXRsb2hrem9pdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fQSu204KBUkJNVb9n4/giphy.gif" alt="Lobby Arcade detail">
+                    <video width="100%" height="auto" autoplay loop muted playsinline>
+                        <source src="video 2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
-                <p class="project-caption">A playful interactive arcade lobby designed to engage users through gamified UI elements.</p>
+                <p class="project-caption">A playful interactive arcade lobby designed to engage users through gamified
+                    UI elements.</p>
             </div>
 
             <div class="project-item">
                 <div class="project-image">
-                    <img src="https://media.giphy.com/media/rXfTv6Tm3owBsoqZD0/giphy.gif" alt="Lobby Arcade detail">
+                    <video width="100%" height="auto" autoplay loop muted playsinline>
+                        <source src="video 3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
         </div>
@@ -375,7 +392,7 @@
 
             <div class="project-item">
                 <div class="project-image">
-                    <img src="nest-wallet.png" alt="Nest Wallet detail">
+                    <img src="nest 3.jpg" alt="Nest Wallet detail">
                 </div>
             </div>
         </div>
@@ -399,7 +416,7 @@
 
             <div class="project-item">
                 <div class="project-image">
-                    <img src="breezy.png" alt="AI Website Editor detail">
+                    <img src="breezy 3.png" alt="AI Website Editor detail">
                 </div>
             </div>
         </div>
@@ -442,8 +459,10 @@
         <button class="info-close" onclick="toggleInfo(event)">Close</button>
         <div class="info-content">
             <h2>About</h2>
-            <p>Angel Wen is a Product Designer based in San Francisco, specializing in user-centered design and AI products.</p>
-            <p>With experience at companies like Nest Wallet, Hootsuite, and various startups, she focuses on solving complex problems through research, iteration, and collaboration.</p>
+            <p>Angel Wen is a Product Designer based in San Francisco, specializing in user-centered design and AI
+                products.</p>
+            <p>With experience at companies like Nest Wallet, Hootsuite, and various startups, she focuses on solving
+                complex problems through research, iteration, and collaboration.</p>
             <p>Previously worked on design systems, data visualization, and enterprise product experiences.</p>
 
             <h2 style="margin-top: 3rem;">Contact</h2>
@@ -470,7 +489,7 @@
         }
 
         // Close with Escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 const overlay = document.getElementById('infoOverlay');
                 if (overlay.classList.contains('active')) {
@@ -482,4 +501,5 @@
     </script>
 
 </body>
+
 </html>
