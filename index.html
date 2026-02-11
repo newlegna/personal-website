@@ -166,14 +166,16 @@
             margin-bottom: 1rem;
         }
 
-        .project-image img {
+        .project-image img,
+        .project-image video {
             width: 100%;
             height: auto;
             object-fit: contain;
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .project-item:hover .project-image img {
+        .project-item:hover .project-image img,
+        .project-item:hover .project-image video {
             transform: scale(1.03);
         }
 
@@ -336,7 +338,9 @@
         <div class="project-row">
             <div class="project-item">
                 <div class="project-image">
-                    <img src="https://media.giphy.com/media/UnQUWUi6quutTT4do4/giphy.gif" alt="Lobby Arcade">
+                    <video autoplay loop muted playsinline>
+                        <source src="video 1.mp4" type="video/mp4">
+                    </video>
                 </div>
                 <h3 class="project-title">Lobby Arcade</h3>
                 <span class="project-meta">Interaction Design · 2025</span>
@@ -344,14 +348,18 @@
 
             <div class="project-item">
                 <div class="project-image">
-                    <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnFvaXZ4YXJ2YTdvMzE3Njd4bHFhZnZsaDhzMmtjdXRsb2hrem9pdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fQSu204KBUkJNVb9n4/giphy.gif" alt="Lobby Arcade detail">
+                    <video autoplay loop muted playsinline>
+                        <source src="video 2.mp4" type="video/mp4">
+                    </video>
                 </div>
                 <p class="project-caption">A playful interactive arcade lobby designed to engage users through gamified UI elements.</p>
             </div>
 
             <div class="project-item">
                 <div class="project-image">
-                    <img src="https://media.giphy.com/media/rXfTv6Tm3owBsoqZD0/giphy.gif" alt="Lobby Arcade detail">
+                    <video autoplay loop muted playsinline>
+                        <source src="video 3.mp4" type="video/mp4">
+                    </video>
                 </div>
             </div>
         </div>
