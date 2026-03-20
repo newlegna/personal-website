@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angel Wen</title>
+    <title>Angel Wen — AI Product Designer</title>
+    <meta name="description" content="Staff AI Product Designer specializing in spatial computing, gesture-based interaction, and multimodal AI experiences.">
     <link rel="icon" type="image/png" href="logo.png">
 
-    <!-- Fonts similar to Monument Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -24,10 +22,13 @@
         :root {
             --black: #000000;
             --white: #ffffff;
-            --text-primary: rgba(255, 255, 255, 0.85);
-            --text-secondary: rgba(255, 255, 255, 0.5);
-            --text-muted: rgba(255, 255, 255, 0.35);
+            --accent: #4285F4;
+            --accent-secondary: #34A853;
+            --text-primary: rgba(255, 255, 255, 0.92);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.4);
             --border: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.04);
             --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'Space Mono', monospace;
         }
@@ -41,9 +42,8 @@
             font-family: var(--font-sans);
             background: var(--black);
             color: var(--text-primary);
-            line-height: 1.4;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         a {
@@ -53,10 +53,10 @@
         }
 
         a:hover {
-            opacity: 0.6;
+            opacity: 0.7;
         }
 
-        img {
+        img, video {
             max-width: 100%;
             height: auto;
             display: block;
@@ -72,28 +72,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 2rem;
-            background: var(--black);
+            padding: 1.5rem 3rem;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
         }
 
         .header::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 2rem;
-            right: 2rem;
+            left: 3rem;
+            right: 3rem;
             height: 1px;
             background: var(--border);
         }
 
         .logo {
             font-size: 1rem;
-            font-weight: 400;
+            font-weight: 500;
             letter-spacing: -0.01em;
         }
 
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
         .nav-link {
-            font-size: 1rem;
+            font-size: 0.875rem;
             font-weight: 400;
             color: var(--text-secondary);
         }
@@ -103,136 +109,317 @@
             opacity: 1;
         }
 
+        /* --- HERO --- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 3rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-label {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            font-family: 'Playfair Display', Georgia, serif;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .hero-meta-item strong {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
         /* --- MAIN --- */
         .main {
-            padding: 8rem 2rem 4rem;
+            padding: 0 3rem 6rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* --- SECTION TITLE --- */
-        .section-title {
-            font-size: 4rem;
-            font-weight: 400;
-            font-style: italic;
-            font-family: 'Playfair Display', Georgia, serif;
-            text-align: center;
-            color: var(--text-primary);
-            margin-bottom: 4rem;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
-        }
-
-        /* --- PROJECT ROW --- */
-        .project-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            padding: 3rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .project-row:first-of-type {
-            padding-top: 0;
-        }
-
-        .project-row:last-of-type {
-            border-bottom: none;
-        }
-
-        /* --- XR APPS SECTION --- */
-        .xr-section {
-            margin-top: 6rem;
-            padding-top: 4rem;
+        /* --- SECTION --- */
+        .section {
+            padding: 6rem 0;
             border-top: 1px solid var(--border);
         }
 
-        .xr-section .section-title {
-            font-size: 3rem;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
             margin-bottom: 3rem;
         }
 
-        .xr-section .project-row {
-            border-bottom: none;
-            padding-bottom: 0;
+        .section-title {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
         }
 
-        /* --- PROJECT ITEM --- */
-        .project-item {
+        .section-count {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+        }
+
+        /* --- FEATURED PROJECT --- */
+        .featured {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .featured-image {
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-bg);
+        }
+
+        .featured-image img {
+            width: 100%;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .featured:hover .featured-image img {
+            transform: scale(1.02);
+        }
+
+        .featured-content h3 {
+            font-size: 2rem;
+            font-weight: 400;
+            font-family: 'Playfair Display', Georgia, serif;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .featured-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            font-size: 0.7rem;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.4rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-secondary);
+        }
+
+        .tag.highlight {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--white);
+        }
+
+        .featured-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- LAB INTRO --- */
+        .lab-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .lab-intro h2 {
+            font-size: 2.5rem;
+            font-weight: 400;
+            font-family: 'Playfair Display', Georgia, serif;
+            margin-bottom: 1rem;
+        }
+
+        .lab-intro p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* --- PROJECT GRID --- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .project-card {
             display: flex;
             flex-direction: column;
         }
 
-        .project-image {
+        .project-card-image {
+            border-radius: 12px;
             overflow: hidden;
-            background: transparent;
+            background: var(--card-bg);
             margin-bottom: 1rem;
+            aspect-ratio: 4/3;
         }
 
-        .project-image img {
+        .project-card-image img {
             width: 100%;
-            height: auto;
-            object-fit: contain;
+            height: 100%;
+            object-fit: cover;
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .project-item:hover .project-image img {
+        .project-card:hover .project-card-image img {
             transform: scale(1.03);
         }
 
-        .project-title {
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
+        .project-card h4 {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
         }
 
-        .project-caption {
-            font-size: 0.875rem;
-            font-weight: 400;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .project-meta {
+        .project-card-meta {
             font-size: 0.75rem;
             font-family: var(--font-mono);
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
         }
 
-        /* --- FOOTER --- */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1.5rem 2rem;
-            text-align: center;
-            background: var(--black);
+        .project-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
 
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 2rem;
-            right: 2rem;
-            height: 1px;
-            background: var(--border);
+        /* --- CAPABILITIES --- */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
         }
 
-        .footer-email {
-            font-size: 0.875rem;
+        .capability {
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .capability:hover {
+            border-color: var(--accent);
+        }
+
+        .capability h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .capability p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* --- EXPERIENCE --- */
+        .experience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .experience-item {
+            display: grid;
+            grid-template-columns: 200px 1fr auto;
+            gap: 2rem;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: baseline;
+        }
+
+        .experience-company {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .experience-role {
+            font-size: 0.95rem;
             color: var(--text-secondary);
         }
 
-        .footer-email:hover {
-            color: var(--white);
-            opacity: 1;
+        .experience-year {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
         }
 
         /* --- INFO OVERLAY --- */
@@ -244,7 +431,7 @@
             bottom: 0;
             z-index: 200;
             background: var(--black);
-            padding: 8rem 2rem 4rem;
+            padding: 8rem 3rem 4rem;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.4s ease, visibility 0.4s ease;
@@ -257,29 +444,35 @@
         }
 
         .info-content {
-            max-width: 800px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
         .info-content h2 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 400;
-            letter-spacing: -0.03em;
-            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
         }
 
         .info-content p {
             font-size: 1.125rem;
-            line-height: 1.6;
+            line-height: 1.7;
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .info-content p strong {
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
         .info-close {
             position: fixed;
             top: 1.5rem;
-            right: 2rem;
-            font-size: 1rem;
+            right: 3rem;
+            font-size: 0.875rem;
             color: var(--text-secondary);
             background: none;
             border: none;
@@ -291,37 +484,106 @@
             color: var(--white);
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            .project-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .info-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
-        @media (max-width: 600px) {
+        .info-links a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 0.6rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            transition: all 0.2s;
+        }
 
-            .header,
-            .footer {
-                padding: 1rem 1.5rem;
-            }
+        .info-links a:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            opacity: 1;
+        }
 
-            .header::after,
-            .footer::before {
-                left: 1.5rem;
-                right: 1.5rem;
-            }
+        /* --- FOOTER --- */
+        .footer {
+            padding: 3rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
 
-            .main {
-                padding: 6rem 1.5rem 5rem;
-            }
+        .footer-cta {
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', Georgia, serif;
+            margin-bottom: 1.5rem;
+        }
 
-            .project-row {
+        .footer-email {
+            display: inline-block;
+            font-size: 1rem;
+            color: var(--accent);
+            padding: 0.75rem 2rem;
+            border: 1px solid var(--accent);
+            border-radius: 100px;
+            transition: all 0.2s;
+        }
+
+        .footer-email:hover {
+            background: var(--accent);
+            color: var(--white);
+            opacity: 1;
+        }
+
+        .footer-meta {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .featured {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
-            .project-title {
-                font-size: 1.125rem;
+            .capabilities-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .experience-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header, .main, .footer {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .header::after {
+                left: 1.5rem;
+                right: 1.5rem;
+            }
+
+            .hero {
+                padding: 7rem 1.5rem 3rem;
+                min-height: auto;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
             }
         }
     </style>
@@ -332,123 +594,189 @@
     <!-- Header -->
     <header class="header">
         <a href="/" class="logo">Angel Wen</a>
-        <a href="#" class="nav-link" onclick="toggleInfo(event)">Info</a>
+        <div class="nav-links">
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#lab" class="nav-link">XR Lab</a>
+            <a href="#" class="nav-link" onclick="toggleInfo(event)">About</a>
+        </div>
     </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <span class="hero-label">Staff AI Product Designer</span>
+        <h1>Designing <em>intelligent experiences</em> at the intersection of AI and spatial computing</h1>
+        <p class="hero-subtitle">I create hands-free, multimodal interactions that move beyond traditional screens — from gesture-based instruments to AI-powered interfaces for the physical world.</p>
+        <div class="hero-meta">
+            <span class="hero-meta-item"><strong>10+</strong> years in product design</span>
+            <span class="hero-meta-item"><strong>20</strong> XR apps in 30 days</span>
+            <span class="hero-meta-item"><strong>Focus:</strong> Conversational AI, Device UX, Spatial Interaction</span>
+        </div>
+    </section>
 
     <!-- Main Content -->
     <main class="main">
-        <h2 class="section-title">Selected<br>Works</h2>
 
-        <!-- Project 1 -->
-        <div class="project-row">
-            <div class="project-item">
-                <div class="project-image">
-                    <video width="100%" height="auto" autoplay loop muted playsinline>
-                        <source src="video 1.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-                <h3 class="project-title">Lobby Arcade</h3>
-                <span class="project-meta">Interaction Design · 2025</span>
+        <!-- Featured Work Section -->
+        <section class="section" id="work">
+            <div class="section-header">
+                <span class="section-title">Featured Work</span>
+                <span class="section-count">AI-Powered Experiences</span>
             </div>
 
-            <div class="project-item">
-                <div class="project-image">
-                    <video width="100%" height="auto" autoplay loop muted playsinline>
-                        <source src="video 2.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
+            <!-- Featured Project: Invisible Violin -->
+            <a href="https://x.com/AngelwenW/status/1995560236531560589" target="_blank" class="featured">
+                <div class="featured-image">
+                    <img src="invisibleviolin.jpg" alt="Invisible Violin - Gesture-based XR instrument">
                 </div>
-                <p class="project-caption">A playful interactive arcade lobby designed to engage users through gamified
-                    UI elements.</p>
-            </div>
-
-            <div class="project-item">
-                <div class="project-image">
-                    <video width="100%" height="auto" autoplay loop muted playsinline>
-                        <source src="video 3.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-        </div>
-
-        <!-- Project 2 -->
-        <div class="project-row">
-            <div class="project-item">
-                <div class="project-image">
-                    <img src="nest-wallet.png" alt="Nest Wallet">
-                </div>
-                <h3 class="project-title">Nest Wallet</h3>
-                <span class="project-meta">Product Design · 2025</span>
-            </div>
-
-            <div class="project-item">
-                <div class="project-image">
-                    <img src="nest-wallet-2.png" alt="Nest Wallet detail">
-                </div>
-                <p class="project-caption">Creating an engaging trading experience in a wallet.</p>
-            </div>
-
-            <div class="project-item">
-                <div class="project-image">
-                    <img src="nest 3.jpg" alt="Nest Wallet detail">
-                </div>
-            </div>
-        </div>
-
-        <!-- Project 3 -->
-        <div class="project-row">
-            <div class="project-item">
-                <div class="project-image">
-                    <img src="breezy.png" alt="AI Website Editor on Mobile">
-                </div>
-                <h3 class="project-title">AI Website Editor on Mobile</h3>
-                <span class="project-meta">Product Design · 2026</span>
-            </div>
-
-            <div class="project-item">
-                <div class="project-image">
-                    <img src="breezy-2.png" alt="AI Website Editor detail">
-                </div>
-                <p class="project-caption">Building websites from your phone with AI-powered assistance.</p>
-            </div>
-
-            <div class="project-item">
-                <div class="project-image">
-                    <img src="breezy 3.png" alt="AI Website Editor detail">
-                </div>
-            </div>
-        </div>
-
-        <!-- XR Apps Section -->
-        <section class="xr-section">
-            <h2 class="section-title">Playground</h2>
-
-            <div class="project-row">
-                <a href="https://x.com/AngelwenW/status/1995560236531560589?s=20" target="_blank" class="project-item">
-                    <div class="project-image">
-                        <img src="invisibleviolin.jpg" alt="Invisible Violin">
+                <div class="featured-content">
+                    <div class="featured-tags">
+                        <span class="tag highlight">Hands-Free</span>
+                        <span class="tag">Gesture Recognition</span>
+                        <span class="tag">Spatial Audio</span>
+                        <span class="tag">AI/ML</span>
                     </div>
-                    <h3 class="project-title">Invisible Violin</h3>
-                    <span class="project-meta">XR · 2025</span>
-                </a>
+                    <h3>Invisible Violin</h3>
+                    <p class="featured-description">As a violinist of 20+ years, I designed a gesture-based XR instrument using hand tracking — translating deep domain expertise into a novel interface where physical muscle memory meets digital interaction. No controllers, no screen, just intuitive movement mapped to real-time audio.</p>
+                    <div class="featured-stats">
+                        <div class="stat">
+                            <span class="stat-value">40K+</span>
+                            <span class="stat-label">Video views</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">Zero</span>
+                            <span class="stat-label">Visual UI needed</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
 
-                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="project-item">
-                    <div class="project-image">
+            <!-- Project Grid -->
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-card-image">
+                        <img src="breezy.png" alt="AI Website Editor">
+                    </div>
+                    <span class="project-card-meta">AI/LLM Design · 2026</span>
+                    <h4>AI Website Editor</h4>
+                    <p>Designing for AI's probabilistic nature — creating intuitive flows for prompt-based generation, error handling, and multi-turn conversations on mobile.</p>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-card-image">
+                        <img src="nest-wallet.png" alt="Nest Wallet">
+                    </div>
+                    <span class="project-card-meta">Consumer Product · 2025</span>
+                    <h4>Nest Wallet</h4>
+                    <p>Systems thinking applied to crypto: designing complex trading flows, real-time data visualization, and state management across a multi-feature consumer product.</p>
+                </div>
+
+                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="project-card">
+                    <div class="project-card-image">
                         <img src="interactiveorchestra.jpg" alt="Interactive Orchestra">
                     </div>
-                    <h3 class="project-title">Interactive Orchestra</h3>
-                    <span class="project-meta">XR · 2025</span>
+                    <span class="project-card-meta">Spatial Computing · 2025</span>
+                    <h4>Interactive Orchestra</h4>
+                    <p>Room-scale XR experience where physical movement controls a full orchestra — exploring body tracking, spatial awareness, and ambient computing.</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- XR Lab Section -->
+        <section class="section" id="lab">
+            <div class="section-header">
+                <span class="section-title">Spatial Interaction Lab</span>
+                <span class="section-count">20 Apps in 30 Days</span>
+            </div>
+
+            <div class="lab-intro">
+                <h2>Rapid experimentation in hands-free, AI-powered interaction</h2>
+                <p>In 30 days, I built 20 XR applications exploring gesture-based, body-tracking, and AI-powered interactions — the same "first-of-their-kind" experimentation needed to invent novel patterns for ambient AI devices.</p>
+            </div>
+
+            <div class="project-grid">
+                <a href="https://x.com/AngelwenW/status/1995560236531560589" target="_blank" class="project-card">
+                    <div class="project-card-image">
+                        <img src="invisibleviolin.png" alt="Invisible Violin">
+                    </div>
+                    <span class="project-card-meta">Gesture + Audio</span>
+                    <h4>Invisible Violin</h4>
+                    <p>Hand tracking to audio output. 20 years of muscle memory translated into gestural controls.</p>
                 </a>
 
-                <a href="https://x.com/AngelwenW/status/1998483539864756486?s=20" target="_blank" class="project-item">
-                    <div class="project-image">
+                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="project-card">
+                    <div class="project-card-image">
+                        <img src="interactiveorchestra.jpg" alt="Interactive Orchestra">
+                    </div>
+                    <span class="project-card-meta">Body Tracking</span>
+                    <h4>Interactive Orchestra</h4>
+                    <p>Full-body movement controls an orchestra. Room-scale spatial awareness.</p>
+                </a>
+
+                <a href="https://x.com/AngelwenW/status/1998483539864756486" target="_blank" class="project-card">
+                    <div class="project-card-image">
                         <img src="thatsmyjam.png" alt="That's My Jam">
                     </div>
-                    <h3 class="project-title">That's My Jam</h3>
-                    <span class="project-meta">XR · 2025</span>
+                    <span class="project-card-meta">AI/ML + Gesture</span>
+                    <h4>That's My Jam</h4>
+                    <p>AI-powered music creation through gesture. Combining ML with physical interaction.</p>
                 </a>
+            </div>
+        </section>
+
+        <!-- Capabilities Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-title">Design Capabilities</span>
+                <span class="section-count">What I Bring</span>
+            </div>
+
+            <div class="capabilities-grid">
+                <div class="capability">
+                    <h4>AI/LLM Interaction</h4>
+                    <p>Designing for probabilistic outputs, conversational flows, error states, and agentic behaviors. Prompt engineering for design prototypes.</p>
+                </div>
+                <div class="capability">
+                    <h4>Beyond-Screen Design</h4>
+                    <p>Gesture, voice, spatial, and ambient interfaces. Hands-free interaction patterns for far-field devices and communal environments.</p>
+                </div>
+                <div class="capability">
+                    <h4>Systems Thinking</h4>
+                    <p>Understanding how components interconnect. Design systems, multi-device experiences, and architectural decision-making.</p>
+                </div>
+                <div class="capability">
+                    <h4>Rapid Prototyping</h4>
+                    <p>20 apps in 30 days. Comfortable with ambiguity, fast iteration, and defining product-market fit through experimentation.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-title">Experience</span>
+            </div>
+
+            <div class="experience-list">
+                <div class="experience-item">
+                    <span class="experience-company">Nest Wallet</span>
+                    <span class="experience-role">Lead Product Designer — Trading experience, consumer crypto product</span>
+                    <span class="experience-year">2025</span>
+                </div>
+                <div class="experience-item">
+                    <span class="experience-company">Breezy (AI Startup)</span>
+                    <span class="experience-role">Product Designer — AI website editor, LLM interaction design</span>
+                    <span class="experience-year">2026</span>
+                </div>
+                <div class="experience-item">
+                    <span class="experience-company">Hootsuite</span>
+                    <span class="experience-role">Product Designer — Enterprise product, design systems, data visualization</span>
+                    <span class="experience-year">2019-2023</span>
+                </div>
+                <div class="experience-item">
+                    <span class="experience-company">Independent XR Lab</span>
+                    <span class="experience-role">Designer & Developer — 20 spatial computing apps, AI/ML integration</span>
+                    <span class="experience-year">2025</span>
+                </div>
             </div>
         </section>
 
@@ -459,25 +787,30 @@
         <button class="info-close" onclick="toggleInfo(event)">Close</button>
         <div class="info-content">
             <h2>About</h2>
-            <p>Angel Wen is a Product Designer based in San Francisco, specializing in user-centered design and AI
-                products.</p>
-            <p>With experience at companies like Nest Wallet, Hootsuite, and various startups, she focuses on solving
-                complex problems through research, iteration, and collaboration.</p>
-            <p>Previously worked on design systems, data visualization, and enterprise product experiences.</p>
+            <p><strong>Angel Wen</strong> is a Product Designer with 10+ years of experience designing complex software applications — from enterprise platforms at Hootsuite to consumer products and AI-powered tools.</p>
 
-            <h2 style="margin-top: 3rem;">Contact</h2>
-            <p><a href="mailto:angelwen4490@gmail.com">Send me an email</a></p>
-            <p>
-                <a href="https://linkedin.com/in/angel-wen" target="_blank">LinkedIn</a> ·
-                <a href="https://twitter.com/AngelwenW" target="_blank">Twitter</a> ·
+            <p>Currently focused on the intersection of <strong>AI and spatial computing</strong>, designing hands-free, multimodal interactions that move beyond traditional screens. Recent work includes building 20 XR applications in 30 days, exploring gesture-based interfaces, body tracking, and AI/ML-powered experiences.</p>
+
+            <p>As a violinist of 20+ years, design is informed by a deep understanding of how physical movement translates to digital interaction — the foundation of the <strong>Invisible Violin</strong> and other spatial instruments.</p>
+
+            <h2 style="margin-top: 3rem;">Philosophy</h2>
+            <p>The best AI interfaces don't feel like AI interfaces. They feel like natural extensions of human capability — intuitive, contextual, and invisible until needed. This is especially true for <strong>communal and shared environments</strong> like the home, where technology should serve multiple users with varying needs and contexts.</p>
+
+            <h2 style="margin-top: 3rem;">Connect</h2>
+            <div class="info-links">
+                <a href="mailto:angelwen4490@gmail.com">Email</a>
+                <a href="https://linkedin.com/in/angel-wen" target="_blank">LinkedIn</a>
+                <a href="https://twitter.com/AngelwenW" target="_blank">Twitter/X</a>
                 <a href="https://instagram.com/creatively.angel" target="_blank">Instagram</a>
-            </p>
+            </div>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
-        <a href="mailto:angelwen4490@gmail.com" class="footer-email">Get in touch</a>
+        <p class="footer-cta">Let's design the future of human-AI interaction</p>
+        <a href="mailto:angelwen4490@gmail.com" class="footer-email">angelwen4490@gmail.com</a>
+        <p class="footer-meta">San Francisco · English (Native) · Mandarin (Fluent)</p>
     </footer>
 
     <script>
@@ -488,8 +821,7 @@
             document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
         }
 
-        // Close with Escape key
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const overlay = document.getElementById('infoOverlay');
                 if (overlay.classList.contains('active')) {
@@ -497,6 +829,18 @@
                     document.body.style.overflow = '';
                 }
             }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
         });
     </script>
 
