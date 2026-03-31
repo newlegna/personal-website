@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invisible Violin — Angel Wen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a; --text-main: #f2f2f2; --text-muted: #888888;
+            --border: rgba(255, 255, 255, 0.08);
+            --font-sans: 'Inter', sans-serif; --font-serif: 'Playfair Display', serif; --font-mono: 'Space Mono', monospace;
+        }
+        body { font-family: var(--font-sans); color: var(--text-main); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { color: inherit; text-decoration: none; }
+        .header { padding: 2rem 4vw; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); z-index: 100;}
+        .logo { font-weight: 500; }
+        .nav-link { font-size: 0.875rem; padding-bottom: 2px; border-bottom: 1px solid var(--text-muted); transition: color 0.3s; color: var(--text-muted);}
+        .nav-link:hover { color: var(--text-main); border-color: var(--text-main);}
+        .container { max-width: 760px; margin: 0 auto; padding: 2rem 4vw 8rem; }
+        .case-study .video-container { width: 100%; border-radius: 4px; margin: 3rem 0; overflow: hidden; display: flex; justify-content: center; background: #000; }
+        .case-study h1 { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 400; margin-bottom: 1rem; line-height: 1.1; letter-spacing: -0.02em; }
+        .case-study h2 { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; margin-top: 5rem; margin-bottom: 1.5rem; color: var(--text-main); }
+        .case-study h3 { font-size: 1.25rem; font-weight: 500; margin-top: 3rem; margin-bottom: 1rem; color: var(--text-main); }
+        .case-study p { margin-bottom: 1.5rem; color: var(--text-muted); font-size: 1.125rem; }
+        .case-study ul { margin-bottom: 1.5rem; padding-left: 2rem; color: var(--text-muted); font-size: 1.125rem; }
+        .case-study li { margin-bottom: 0.5rem; }
+        .case-study blockquote { border-left: 2px solid var(--border); padding-left: 2rem; margin: 3rem 0; font-style: italic; font-size: 1.25rem; color: var(--text-main); }
+        .footer { text-align: center; padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 4rem; color: var(--text-muted); font-size: 0.875rem; }
+        .mono-label { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); display: block; margin-bottom: 1rem; }
+        @media (max-width: 768px) {
+            .header { padding: 1.25rem 4vw; }
+            .container { padding: 1.5rem 4vw 4rem; }
+            .case-study h1 { font-size: 2rem; }
+            .case-study h2 { font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1rem; }
+            .case-study h3 { margin-top: 2rem; }
+            .case-study p, .case-study ul { font-size: 1rem; }
+            .case-study blockquote { margin: 2rem 0; font-size: 1.1rem; padding-left: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">Angel Wen</a>
+        <a href="index.html" class="nav-link">Back to Work</a>
+    </header>
+    <main class="container case-study">
+        <span class="mono-label">Spatial Interaction & AI</span>
+        <h1>Invisible Violin</h1>
+        <p>Translating 20 years of physical muscle memory into a screenless, controller-free digital interface.</p>
+
+        <div class="video-container">
+            <blockquote class="twitter-tweet" data-theme="dark"><p lang="en" dir="ltr">I built an invisible violin in VR using hand tracking! 🎻✨<br><br>As a violinist, I wanted to see if I could translate physical muscle memory into spatial audio without any controllers. <a href="https://t.co/placeholder">pic.twitter.com/placeholder</a></p>&mdash; Angel Wen (@AngelwenW) <a href="https://twitter.com/AngelwenW/status/1995560236531560589">March 30, 2025</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+
+        <h2>The Challenge</h2>
+        <p>How do we design an interface for expert users that relies entirely on proprioception and muscle memory, without any haptic feedback or physical constraints?</p>
+        <p>Current XR paradigms heavily rely on visual UI overlays or physical controllers. But for a violinist, the instrument is an extension of the body. The interaction needs to be instantaneous, spatially precise, and fluid. The design challenge wasn't just about rendering audio—it was about creating a mental model where empty space feels like a tangible instrument.</p>
+
+        <h2>Designing for Probabilistic Inputs</h2>
+        <p>Hand tracking is inherently probabilistic. Cameras lose tracking, fingers occlude each other, and spatial coordinates jitter. Standard UX design assumes deterministic input (a button is either clicked or not). AI and spatial design require a different approach:</p>
+        <ul>
+            <li><strong>Heuristic Smoothing:</strong> I designed interaction thresholds that absorb the jitter of the hand-tracking model, ensuring that micro-fluctuations don't result in erratic audio outputs.</li>
+            <li><strong>Intent Recognition:</strong> Rather than mapping raw coordinates to sound 1:1, the system interprets the <em>intent</em> of the gesture. A bowing motion has a specific velocity curve. The system identifies this curve and aligns the audio synthesis accordingly.</li>
+            <li><strong>Audio as Affordance:</strong> Without physical strings, audio becomes the primary feedback loop. The friction, pitch, and volume react in real-time to the spatial depth of the bowing hand, creating a synthetic "haptic" experience purely through sound.</li>
+        </ul>
+
+        <blockquote>
+            "The best AI interfaces don't feel like AI interfaces. They feel like natural extensions of human capability — intuitive, contextual, and invisible until needed."
+        </blockquote>
+
+        <h2>The Outcome</h2>
+        <p>The Invisible Violin proves that we can design zero-UI experiences that leverage human expertise. By moving away from screens and controllers, we open the door to ambient computing environments where our natural movements are the only interface we need.</p>
+        
+        <h3>Key Learnings for Spatial AI:</h3>
+        <ul>
+            <li><strong>Muscle Memory over Visuals:</strong> Expert users don't need to see the interface if the spatial mapping aligns with their proprioception.</li>
+            <li><strong>Graceful Degradation:</strong> When the tracking model loses confidence, the interface must degrade gracefully rather than failing abruptly, maintaining the user's immersion.</li>
+            <li><strong>Multimodal Feedback Loops:</strong> In the absence of haptics, hyper-responsive audio can trick the brain into "feeling" the interaction.</li>
+        </ul>
+
+    </main>
+    <footer class="footer container">
+        <a href="index.html" class="nav-link">← Return to Portfolio</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breezy AI Website Editor — Angel Wen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a; --text-main: #f2f2f2; --text-muted: #888888;
+            --border: rgba(255, 255, 255, 0.08);
+            --font-sans: 'Inter', sans-serif; --font-serif: 'Playfair Display', serif; --font-mono: 'Space Mono', monospace;
+        }
+        body { font-family: var(--font-sans); color: var(--text-main); background: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        a { color: inherit; text-decoration: none; }
+        .header { padding: 2rem 4vw; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(10,10,10,0.9); backdrop-filter: blur(10px); z-index: 100;}
+        .logo { font-weight: 500; }
+        .nav-link { font-size: 0.875rem; padding-bottom: 2px; border-bottom: 1px solid var(--text-muted); transition: color 0.3s; color: var(--text-muted);}
+        .nav-link:hover { color: var(--text-main); border-color: var(--text-main);}
+        .container { max-width: 760px; margin: 0 auto; padding: 2rem 4vw 8rem; }
+        .case-study img { width: 100%; height: auto; border-radius: 4px; margin: 3rem 0; background: #141414; }
+        .case-study h1 { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 400; margin-bottom: 1rem; line-height: 1.1; letter-spacing: -0.02em; }
+        .case-study h2 { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; margin-top: 5rem; margin-bottom: 1.5rem; color: var(--text-main); }
+        .case-study h3 { font-size: 1.25rem; font-weight: 500; margin-top: 3rem; margin-bottom: 1rem; color: var(--text-main); }
+        .case-study p { margin-bottom: 1.5rem; color: var(--text-muted); font-size: 1.125rem; }
+        .case-study ul { margin-bottom: 1.5rem; padding-left: 2rem; color: var(--text-muted); font-size: 1.125rem; }
+        .case-study li { margin-bottom: 0.5rem; }
+        .case-study blockquote { border-left: 2px solid var(--border); padding-left: 2rem; margin: 3rem 0; font-style: italic; font-size: 1.25rem; color: var(--text-main); }
+        .footer { text-align: center; padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 4rem; color: var(--text-muted); font-size: 0.875rem; }
+        .mono-label { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); display: block; margin-bottom: 1rem; }
+        @media (max-width: 768px) {
+            .header { padding: 1.25rem 4vw; }
+            .container { padding: 1.5rem 4vw 4rem; }
+            .case-study h1 { font-size: 2rem; }
+            .case-study h2 { font-size: 1.5rem; margin-top: 3rem; margin-bottom: 1rem; }
+            .case-study h3 { margin-top: 2rem; }
+            .case-study p, .case-study ul { font-size: 1rem; }
+            .case-study blockquote { margin: 2rem 0; font-size: 1.1rem; padding-left: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">Angel Wen</a>
+        <a href="index.html" class="nav-link">Back to Work</a>
+    </header>
+    <main class="container case-study">
+        <span class="mono-label">AI Product Design</span>
+        <h1>Breezy AI Website Editor</h1>
+        <p>Designing hybrid interfaces that balance generative LLM capabilities with deterministic user control.</p>
+
+        <img src="breezy.png" alt="Breezy AI Website Editor Interface">
+
+        <h2>The Challenge: Probabilistic Design</h2>
+        <p>Generative AI is inherently probabilistic. When a user prompts an AI to "build a portfolio website," the underlying LLM generates code and layout structures that are highly variable. Traditional UX design relies on deterministic outcomes (click a button, get an exact result). My challenge at Breezy was bridging this gap: creating a user experience that harnesses the creative power of AI while giving the user predictable, granular control over the final output.</p>
+        
+        <h2>Steerability & Hybrid Interfaces</h2>
+        <p>The "magic prompt box" is a flawed design pattern for complex creation tools. Users quickly hit a wall when they want to tweak a specific element but are forced to re-prompt the entire layout, risking unwanted changes to other areas.</p>
+        <p>To solve this, I designed a <strong>Hybrid Interaction Model</strong>:</p>
+        <ul>
+            <li><strong>Macro-generation via Chat:</strong> Users use natural language for broad strokes (e.g., "Generate a dark-mode landing page for a coffee shop").</li>
+            <li><strong>Micro-editing via Direct Manipulation:</strong> Once the layout is generated, users can point, click, and drag elements on a traditional WYSIWYG canvas. The AI steps back, and deterministic control takes over.</li>
+            <li><strong>Contextual Prompting:</strong> If a user wants AI help on a specific component, they can highlight just that section and prompt locally (e.g., "Make this hero text punchier"), preserving the rest of the layout's state.</li>
+        </ul>
+
+        <img src="breezy-2.png" alt="Breezy Component Editing">
+
+        <h2>Designing for Latency & Streaming</h2>
+        <p>LLMs are slow. Waiting 10-15 seconds for a full layout to generate is an eternity in UX. To mitigate perceived latency, I collaborated closely with the engineering team to design a progressive streaming architecture.</p>
+        <p>Instead of a static loading spinner, the interface streams the layout incrementally. First, the structural skeleton loads, followed by typography, then colors, and finally imagery. This progressive disclosure not only reduces perceived wait time but also allows users to interrupt and steer the generation mid-flight if it's heading in the wrong direction.</p>
+
+        <blockquote>
+            "Trust in AI tools isn't built through perfection; it's built through predictability, steerability, and graceful error recovery."
+        </blockquote>
+
+        <h2>Error Recovery & Hallucinations</h2>
+        <p>When generating code, LLMs will inevitably hallucinate or break CSS grid layouts. I implemented a robust version control and rollback system deeply integrated into the UX. Every AI generation acts as a non-destructive branch. If the AI breaks the layout, users have a highly visible "undo generation" path, ensuring they never feel trapped by a bad output.</p>
+
+        <h2>The Outcome</h2>
+        <p>By treating the AI as a collaborative partner rather than an infallible oracle, we dramatically reduced user frustration. The hybrid interface empowered users to move from blank canvas to published site in minutes, while retaining the pixel-perfect control expected from professional design tools.</p>
+
+    </main>
+    <footer class="footer container">
+        <a href="index.html" class="nav-link">← Return to Portfolio</a>
+    </footer>
+</body>
+</html>
