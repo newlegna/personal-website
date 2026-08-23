@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angel Wen — Founding Product Designer</title>
+    <meta name="description" content="Founding Product Designer specializing in spatial computing, gesture-based interaction, and multimodal AI experiences.">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-hover: #1f1f1f;
+            --text-main: #f2f2f2;
+            --text-muted: #888888;
+            --text-faint: #555555;
+            --accent: #f2f2f2; /* Monochromatic accent for high-end feel */
+            --border: rgba(255, 255, 255, 0.08);
+            
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-mono: 'Space Mono', monospace;
+            
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            background: var(--bg);
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--text-main);
+            background: var(--bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--text-main);
+            color: var(--bg);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        img, video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 4vw;
+        }
+
+        .mono-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+        }
+
+        /* --- ANIMATIONS --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s var(--ease-out-expo), transform 1s var(--ease-out-expo);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 2rem 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+            pointer-events: none; /* Let clicks pass through except for links */
+        }
+
+        .header > * {
+            pointer-events: auto;
+        }
+
+        .logo {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* --- HERO --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 10vh;
+            padding-bottom: 10vh;
+        }
+
+        .hero-top {
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s var(--ease-out-expo) forwards;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 7vw, 6.5rem);
+            font-weight: 400;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            max-width: 1100px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeInUp 1.2s var(--ease-out-expo) 0.2s forwards;
+        }
+
+        .hero-title em {
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .hero-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 4rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1.2s var(--ease-out-expo) 0.4s forwards;
+        }
+
+        .hero-desc {
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .stat-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-num {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        /* --- SECTIONS --- */
+        .section {
+            padding: 8rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 5rem;
+        }
+
+        /* --- FEATURED PROJECT --- */
+        .featured-project {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            margin-bottom: 8rem;
+        }
+
+        .featured-media {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            aspect-ratio: 4/5;
+            background: var(--surface);
+        }
+
+        .featured-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.5s var(--ease-out-expo);
+        }
+
+        .featured-project:hover .featured-media img {
+            transform: scale(1.05);
+        }
+
+        .featured-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .featured-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-muted);
+        }
+
+        .featured-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .featured-desc {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 500px;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 1rem 2rem;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            align-self: flex-start;
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .btn-outline:hover {
+            background: var(--text-main);
+            color: var(--bg);
+        }
+
+        /* --- GRID GALLERY --- */
+        .grid-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 3rem 2rem;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            group: card;
+            cursor: pointer;
+        }
+
+        .card-media {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            background: var(--surface);
+        }
+
+        .card-media img, .card-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s var(--ease-out-expo);
+        }
+
+        .card {
+            transition: transform 0.6s var(--ease-out-expo);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card:hover .card-media img, .card:hover .card-media video {
+            transform: scale(1.03);
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* --- LIST SECTION (EXPERIENCE/CAPABILITIES) --- */
+        .list-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+        }
+
+        .list-intro {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 1.3;
+            color: var(--text-muted);
+        }
+
+        .list-intro strong {
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        .list-items {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 2fr 3fr 1fr;
+            gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border);
+            align-items: baseline;
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+        }
+
+        .list-item::before {
+            content: '';
+            position: absolute;
+            left: -1rem;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background: var(--text-main);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .list-item:hover {
+            color: var(--text-muted);
+            transform: translateX(1rem);
+        }
+
+        .list-item:hover::before {
+            transform: scaleY(1);
+            transform-origin: top;
+        }
+
+        .list-item:hover .item-title {
+            color: var(--text-main);
+        }
+
+        .item-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .item-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .item-meta {
+            text-align: right;
+        }
+
+        /* --- FOOTER --- */
+        .footer {
+            padding: 8rem 0 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-title {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            margin-bottom: 3rem;
+            line-height: 1.1;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 6rem;
+        }
+
+        .footer-link {
+            font-size: 1.125rem;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .footer-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .footer-bottom {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+            color: var(--text-faint);
+        }
+
+        /* --- MODAL / ABOUT --- */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s var(--ease-out-expo);
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            max-width: 800px;
+            padding: 2rem;
+            transform: translateY(20px);
+            transition: transform 0.6s var(--ease-out-expo);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 4vw;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 0.875rem;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            padding: 1rem;
+        }
+
+        .modal-body p {
+            font-family: var(--font-serif);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            line-height: 1.4;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .modal-body p strong {
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .featured-project {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .featured-media {
+                aspect-ratio: 16/9;
+            }
+            .list-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .list-item {
+                grid-template-columns: 1fr 1fr auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.25rem 4vw;
+            }
+            .nav-links {
+                gap: 1rem;
+            }
+            .hero {
+                min-height: auto;
+                padding-top: 20vh;
+                padding-bottom: 5vh;
+            }
+            .hero-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2.5rem;
+            }
+            .hero-stats {
+                gap: 2rem;
+            }
+            .section {
+                padding: 4rem 0;
+            }
+            .section-header {
+                margin-bottom: 2.5rem;
+            }
+            .featured-project {
+                margin-bottom: 4rem;
+                gap: 2rem;
+            }
+            .featured-title {
+                margin-bottom: 1rem;
+            }
+            .grid-gallery {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .list-grid {
+                gap: 3rem;
+            }
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                padding: 1.5rem 0;
+            }
+            .list-item:hover {
+                transform: translateX(0.5rem);
+            }
+            .item-meta {
+                text-align: left;
+            }
+            .footer {
+                padding: 4rem 0 2rem;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 1.5rem;
+                margin-bottom: 4rem;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+            .modal-content {
+                padding: 1.5rem;
+            }
+            .modal-close {
+                top: 1.25rem;
+                right: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo">Angel Wen</a>
+        <nav class="nav-links">
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#lab" class="nav-link">Lab</a>
+            <a href="#" class="nav-link" onclick="toggleModal(event)">About</a>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero container">
+        <div class="hero-top">
+            <span class="mono-label">Founding Product Designer</span>
+        </div>
+        <h1 class="hero-title">Designing <em>intelligent experiences</em> beyond the screen.</h1>
+        <div class="hero-bottom">
+            <p class="hero-desc">I specialize in spatial computing, multimodal interactions, and shaping the future of AI interfaces for the physical world.</p>
+            <div class="hero-stats">
+                <div class="stat-block">
+                    <span class="stat-num">7+</span>
+                    <span class="mono-label">Years Design</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-num">10+</span>
+                    <span class="mono-label">XR Apps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="section container">
+        <div class="section-header reveal">
+            <span class="mono-label">Selected Work</span>
+            <span class="mono-label">[ 2024 — 2026 ]</span>
+        </div>
+
+        <!-- Featured -->
+        <div class="featured-project reveal">
+            <div class="featured-media">
+                <img src="invisibleviolin.jpg" alt="Invisible Violin">
+            </div>
+            <div class="featured-info">
+                <div class="featured-tags">
+                    <span class="tag">Spatial Audio</span>
+                    <span class="tag">Hand Tracking</span>
+                    <span class="tag">XR</span>
+                </div>
+                <h2 class="featured-title">Invisible Violin</h2>
+                <p class="featured-desc">A gesture-based XR instrument translating 20 years of physical muscle memory into a screenless, controller-free digital interface.</p>
+                <a href="invisible-violin.html" class="btn-outline">
+                    Read Case Study
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid-gallery">
+            <a href="breezy.html" class="card reveal">
+                <div class="card-media">
+                    <img src="breezy.png" alt="Breezy">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">Breezy</span>
+                    <span class="mono-label">2026</span>
+                </div>
+                <h3 class="card-title">AI Website Editor</h3>
+                <p class="card-desc">Designing intuitive flows for probabilistic LLM generation.</p>
+            </a>
+
+            <div class="card reveal">
+                <div class="card-media">
+                    <img src="nest-wallet.png" alt="Nest Wallet">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">Nest Wallet</span>
+                    <span class="mono-label">2025</span>
+                </div>
+                <h3 class="card-title">Consumer Trading</h3>
+                <p class="card-desc">Complex trading flows and real-time state management.</p>
+            </div>
+
+            <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="card reveal">
+                <div class="card-media">
+                    <img src="interactiveorchestra.jpg" alt="Interactive Orchestra">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">XR</span>
+                    <span class="mono-label">2025</span>
+                </div>
+                <h3 class="card-title">Interactive Orchestra</h3>
+                <p class="card-desc">Room-scale spatial awareness and body tracking.</p>
+            </a>
+
+            <div class="card reveal">
+                <div class="card-media">
+                    <video autoplay loop muted playsinline>
+                        <source src="video 1.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">Interaction</span>
+                    <span class="mono-label">2025</span>
+                </div>
+                <h3 class="card-title">Lobby Arcade</h3>
+                <p class="card-desc">Playful, gamified UI exploring motion engagement.</p>
+            </div>
+
+            <a href="nomad.html" class="card reveal">
+                <div class="card-media">
+                    <img src="nomad.jpg" alt="Nomad Project">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">Nomad</span>
+                    <span class="mono-label">Product Design</span>
+                </div>
+                <h3 class="card-title">Animation Marketplace</h3>
+                <p class="card-desc">Connecting animators with opportunities in the industry.</p>
+            </a>
+
+            <a href="nwhacks.html" class="card reveal">
+                <div class="card-media">
+                    <img src="nwhacks.png" alt="nwHacks">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">nwHacks</span>
+                    <span class="mono-label">Brand & Web</span>
+                </div>
+                <h3 class="card-title">Hackathon Branding</h3>
+                <p class="card-desc">Creating a modern hackathon brand for 1200+ attendees.</p>
+            </a>
+
+            <a href="radical-hospitality.html" class="card reveal">
+                <div class="card-media">
+                    <img src="radical-hospitality.png" alt="Radical Hospitality">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">Radical Hospitality</span>
+                    <span class="mono-label">UX / Product</span>
+                </div>
+                <h3 class="card-title">Community Travel</h3>
+                <p class="card-desc">Building a safer, community-oriented couch surfing app.</p>
+            </a>
+
+            <a href="aic.html" class="card reveal">
+                <div class="card-media">
+                    <img src="aic.png" alt="Accommodation in Canada">
+                </div>
+                <div class="card-meta">
+                    <span class="mono-label">AIC</span>
+                    <span class="mono-label">UX Research</span>
+                </div>
+                <h3 class="card-title">Homestay Experience</h3>
+                <p class="card-desc">Improving the searching experience for international students.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Lab Section -->
+    <section id="lab" class="section container">
+        <div class="section-header reveal">
+            <span class="mono-label">Spatial Lab</span>
+            <span class="mono-label">10+ Apps Made</span>
+        </div>
+
+        <div class="list-grid">
+            <div class="list-intro reveal">
+                Rapid experimentation in <strong>hands-free, AI-powered interaction</strong> to invent novel patterns for ambient devices.
+            </div>
+            
+            <div class="list-items">
+                <a href="invisible-violin.html" class="list-item reveal">
+                    <h4 class="item-title">Invisible Violin</h4>
+                    <p class="item-desc">Hand tracking mapped to real-time audio synthesis.</p>
+                    <span class="mono-label item-meta">Gesture</span>
+                </a>
+                <a href="https://eml.ubc.ca/projects/interactive-orchestra/" target="_blank" class="list-item reveal">
+                    <h4 class="item-title">Orchestra Director</h4>
+                    <p class="item-desc">Full-body tracking controlling spatial audio stems.</p>
+                    <span class="mono-label item-meta">Body</span>
+                </a>
+                <a href="https://x.com/AngelwenW/status/1998483539864756486" target="_blank" class="list-item reveal">
+                    <h4 class="item-title">That's My Jam</h4>
+                    <p class="item-desc">AI music generation triggered by physical movement.</p>
+                    <span class="mono-label item-meta">AI/ML</span>
+                </a>
+                <div class="list-item reveal">
+                    <h4 class="item-title">Invisible Cello</h4>
+                    <p class="item-desc">Screenless XR instrument translating bowing techniques into digital audio.</p>
+                    <span class="mono-label item-meta">Gesture</span>
+                </div>
+                <div class="list-item reveal">
+                    <h4 class="item-title">ChoreoAI</h4>
+                    <p class="item-desc">AI-powered dance training using real-time pose estimation.</p>
+                    <span class="mono-label item-meta">Body Tracking</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer container reveal">
+        <h2 class="footer-title">Let's shape the future<br>of interaction.</h2>
+        <div class="footer-links">
+            <a href="mailto:angelwen4490@gmail.com" class="footer-link">angelwen4490@gmail.com</a>
+            <a href="https://twitter.com/AngelwenW" target="_blank" class="footer-link">Twitter / X</a>
+            <a href="https://linkedin.com/in/angel-wen" target="_blank" class="footer-link">LinkedIn</a>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Angel Wen</span>
+            <span>SF · English · Mandarin</span>
+        </div>
+    </footer>
+
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal">
+        <button class="modal-close" onclick="toggleModal(event)">[ Close ]</button>
+        <div class="modal-content">
+            <div class="modal-body">
+                <p>I am a Founding Product Designer focused on <strong>spatial computing and AI</strong>. I design multimodal interactions that move beyond traditional screens.</p>
+                <p>My philosophy is simple: the best interfaces feel like <strong>natural extensions of human capability</strong> — intuitive, contextual, and invisible until needed.</p>
+                <p>As a violinist of 20+ years, my work is deeply informed by how <strong>physical muscle memory</strong> translates into digital environments.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal logic
+        function toggleModal(e) {
+            if(e) e.preventDefault();
+            const modal = document.getElementById('aboutModal');
+            modal.classList.toggle('active');
+            document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : '';
+        }
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('aboutModal').classList.contains('active')) {
+                toggleModal();
+            }
+        });
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
